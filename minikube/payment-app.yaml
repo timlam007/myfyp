@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: hassanhbahmed/payment-service:latest  # Replace with your actual image
+          ports:
+            - containerPort: 9050
+          env:
+            - name: DB_HOST
+              value: "mysql-db"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: "mysqluser"
+            - name: DB_PASS
+              value: "mypass"
+            - name: DB_SCHEMA
+              value: "ecommerce_app_database"
+            - name: ACTIVE_PROFILE
+              value: "dev"
+            - name: PORT
+              value: "9050"
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - protocol: TCP
+      port: 9050
+      targetPort: 9050
+      nodePort: 30001
+  type: NodePort
+
+

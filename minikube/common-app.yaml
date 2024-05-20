@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: common-data-service
+  labels:
+    app: common-data-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: common-data-service
+  template:
+    metadata:
+      labels:
+        app: common-data-service
+    spec:
+      containers:
+        - name: common-data-service
+          image: hassanhbahmed/common-data-service:latest  # Replace with your actual image
+          ports:
+            - containerPort: 9000
+          env:
+            - name: DB_HOST
+              value: "mysql-db"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: "mysqluser"
+            - name: DB_PASS
+              value: "mypass"
+            - name: DB_SCHEMA
+              value: "ecommerce_app_database"
+            - name: ACTIVE_PROFILE
+              value: "dev"
+            - name: PORT
+              value: "9000"
+            - name: REDIS_PASSWORD
+              value: "mypass"
+            - name: REDIS_HOST
+              value: "redis-cache"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REACT_CLIENT_URL
+              value: "http://18.207.207.250"
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: common-data-service
+spec:
+  selector:
+    app: common-data-service
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      nodePort: 30002
+  type: NodePort
+

@@ -40,7 +40,7 @@ public class PaymentController {
                     ChargeCreateParams.builder()
                             .setAmount(cardToken.getAmount())
                             .setCurrency(cardToken.getCurrency())
-                            .setDescription("Shopper Buy")
+                            .setDescription("DockShop Buy")
                             .setSource(cardToken.getId())
                             .build();
 

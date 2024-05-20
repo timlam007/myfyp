@@ -205,7 +205,7 @@ export const sendPaymentToken = (token) => async dispatch => {
     if (process.env.REACT_APP_PAYMENT_SERVICE_URL) {
         url = `${process.env.REACT_APP_PAYMENT_SERVICE_URL}/payment`
     } else {
-        url = `http://localhost:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
+        url = `http://18.207.207.250:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
     }
 
     let config = {
