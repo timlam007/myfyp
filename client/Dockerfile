@@ -19,4 +19,4 @@ WORKDIR /usr/src/app
 COPY --from=base /usr/src/app .
 
 # Initiate npm start
-CMD [ "npm", "start", "--host", "0.0.0.0" ]
+CMD [ "npm", "run", "start_docker_dev" ]
