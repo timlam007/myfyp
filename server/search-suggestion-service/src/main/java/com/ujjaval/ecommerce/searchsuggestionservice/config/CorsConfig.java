@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer
 {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://18.207.207.250:3000/")
+        registry.addMapping("/**").allowedOrigins("http://EC2_MINIKUBE_SERVER_IP_PLACEHOLDER:3000/")
                 .allowedMethods("GET", "POST", "OPTIONS", "DELETE");
     }
 }

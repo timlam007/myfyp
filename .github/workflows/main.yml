@@ -13,15 +13,72 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Setup the environment with new IP
+      env:
+          PRIVATE_KEY: ${{ secrets.PEM_FILE }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/.env"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/minikube/common.yaml"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/api/service_api.js"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/actions/index.js"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/server/search-suggestion-service/src/main/java/com/ujjaval/ecommerce/searchsuggestionservice/config/CorsConfig.java"
+
+    - name: Build the images
+      env:
+          PRIVATE_KEY: ${{ secrets.PEM_FILE }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo docker compose build"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/client && sudo docker build -t hassanhbahmed/react-ui:latest ."
+
+
+    - name: Tagging the images
+      env:
+          PRIVATE_KEY: ${{ secrets.PEM_FILE }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker tag myfyp-search-suggestion-service:latest hassanhbahmed/search-suggestion-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker tag myfyp-common-data-service:latest hassanhbahmed/common-data-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker tag myfyp-authentication-service:latest hassanhbahmed/authentication-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker tag myfyp-payment-service:latest hassanhbahmed/payment-service:latest"
+
+    - name: Pushing image
+      env:
+          PRIVATE_KEY: ${{ secrets.PEM_FILE }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker push hassanhbahmed/search-suggestion-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker push hassanhbahmed/common-data-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker push hassanhbahmed/authentication-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker push hassanhbahmed/payment-service:latest"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo docker push hassanhbahmed/react-ui:latest"
+
     - name: Deploy to Minikube
       env:
           PRIVATE_KEY: ${{ secrets.PEM_FILE }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          REACT_CLIENT_URL_SECRET: ${{ vars.REACT_CLIENT_URL_SECRET }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube start --driver=docker --cpus=2 --memory=6144 --force"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl delete -f /home/ubuntu/CICD/myfyp/minikube/ && sleep 60"
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|REACT_CLIENT_URL_PLACEHOLDER|'$REACT_CLIENT_URL_SECRET'|g' /home/ubuntu/CICD/myfyp/minikube/common.yaml"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl apply -f /home/ubuntu/CICD/myfyp/minikube"
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|'$REACT_CLIENT_URL_SECRET'|REACT_CLIENT_URL_PLACEHOLDER|g' /home/ubuntu/CICD/myfyp/minikube/common.yaml"
+
+    - name: Refresh the environment
+      env:
+          PRIVATE_KEY: ${{ secrets.PEM_FILE }}
+          SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+          EC2_MINIKUBE_SERVER_IP: ${{ vars.EC2_MINIKUBE_SERVER_IP }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && git reset --hard"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|'$EC2_MINIKUBE_SERVER_IP'|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|g' /home/ubuntu/CICD/myfyp/.env"

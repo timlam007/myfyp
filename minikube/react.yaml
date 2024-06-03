@@ -22,7 +22,8 @@ spec:
     spec:
       containers:
         - name: react-ui
-          image: hassanhbahmed/react-ui:1
+          image: hassanhbahmed/react-ui:latest
+          imagePullPolicy: Always
           stdin: true
           tty: true
           ports:
