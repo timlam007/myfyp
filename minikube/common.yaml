@@ -60,7 +60,7 @@ spec:
             - name: REDIS_PORT
               value: "6379"
             - name: REACT_CLIENT_URL
-              value: "http://54.84.209.170"
+              value: "http://EC2_MINIKUBE_SERVER_IP_PLACEHOLDER"
       restartPolicy: Always
 ---
 apiVersion: v1
