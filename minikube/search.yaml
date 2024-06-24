@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: search-suggestion-service
+  labels:
+    app: search-suggestion-service
 spec:
   replicas: 1
   selector:
@@ -15,6 +17,7 @@ spec:
       containers:
         - name: search-suggestion-service
           image: hassanhbahmed/search-suggestion-service:latest
+          imagePullPolicy: Always
           env:
             - name: ACTIVE_PROFILE
               value: "dev"
@@ -24,9 +27,8 @@ spec:
               value: "http://common-data-service:9000"
           ports:
             - containerPort: 10000
-
+      restartPolicy: Always
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
