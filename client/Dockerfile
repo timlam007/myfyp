@@ -5,7 +5,7 @@ FROM node:14-alpine AS base
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package*.json ./
+COPY ./client/package*.json ./
 RUN npm install --only=production
 
 # Bundle app source
@@ -19,4 +19,4 @@ WORKDIR /usr/src/app
 COPY --from=base /usr/src/app .
 
 # Initiate npm start
-CMD [ "npm", "start", "--host", "0.0.0.0" ]
+CMD [ "npm", "run-script", "start_docker_dev" ]
