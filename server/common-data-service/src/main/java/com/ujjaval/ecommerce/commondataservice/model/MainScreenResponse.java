@@ -2,6 +2,8 @@ package com.ujjaval.ecommerce.commondataservice.model;
 
 import com.ujjaval.ecommerce.commondataservice.dto.BrandImagesDTO;
 import com.ujjaval.ecommerce.commondataservice.dto.ApparelImagesDTO;
+import com.ujjaval.ecommerce.commondataservice.dto.ApparelImagesDTO;
+import com.ujjaval.ecommerce.commondataservice.dto.ProductImagesDTO;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.images.CarouselImages;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +22,15 @@ public class MainScreenResponse implements Serializable {
     private List<BrandImagesDTO> brands;
     private List<ApparelImagesDTO> apparels;
     private List<CarouselImages> carousels;
+    private List<ProductImagesDTO> products;
 
     public MainScreenResponse(List<BrandImagesDTO> brands,
                               List<ApparelImagesDTO> apparels,
-                              List<CarouselImages> carousels) {
+                              List<CarouselImages> carousels,
+                              List<ProductImagesDTO> products) {
         this.brands = brands;
         this.apparels = apparels;
         this.carousels = carousels;
+        this.products = products;
     }
 }
