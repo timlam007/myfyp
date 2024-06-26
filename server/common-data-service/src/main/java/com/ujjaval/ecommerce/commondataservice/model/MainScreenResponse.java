@@ -18,13 +18,16 @@ import java.util.List;
 public class MainScreenResponse implements Serializable {
 
     private List<BrandImagesDTO> brands;
+    private List<BrandImagesDTO> products;
     private List<ApparelImagesDTO> apparels;
     private List<CarouselImages> carousels;
 
     public MainScreenResponse(List<BrandImagesDTO> brands,
-                              List<ApparelImagesDTO> apparels,
-                              List<CarouselImages> carousels) {
+                                List<BrandImagesDTO> products,
+                                List<ApparelImagesDTO> apparels,
+                                List<CarouselImages> carousels) {
         this.brands = brands;
+        this.products = products;
         this.apparels = apparels;
         this.carousels = carousels;
     }

@@ -82,6 +82,11 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
+        List<BrandImages> productList = brandImagesRepository.getAllData();
+        listType = new TypeToken<List<BrandImagesDTO>>() {
+        }.getType();
+        List<BrandImagesDTO> productDTOList = modelMapper.map(productList, listType);
+
         List<ApparelImages> apparelList = apparelImagesRepository.getAllData();
         listType = new TypeToken<List<ApparelImagesDTO>>() {
         }.getType();
@@ -89,7 +94,7 @@ public class CommonDataServiceImpl implements CommonDataService {
 
         List<CarouselImages> carouselList = carouselImagesRepository.getAllData();
 
-        return new MainScreenResponse(brandDTOList, apparelDTOList, carouselList);
+        return new MainScreenResponse(brandDTOList, productDTOList, apparelDTOList, carouselList);
     }
 
     @Cacheable(key = "#queryParams", value = "filterAttributesResponse")

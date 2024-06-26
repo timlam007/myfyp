@@ -7,7 +7,8 @@ import {useSelector} from "react-redux";
 
 const queryType = {
     brand: 1,
-    apparel: 2
+    apparel: 2,
+    product: 3
 }
 
 const TopCategoriesAndBrands = () => {
@@ -29,6 +30,8 @@ const TopCategoriesAndBrands = () => {
                         filterQuery = `apparels=${info.apparelInfo.id}::genders=${info.genderInfo.id}`
                     }
                     break
+                case queryType.product:
+                    return ""
                 default:
                     log.error("[TopCategoriesAndBrands]: filterQueryType is unsupported = " + filterQueryType)
                     return null
@@ -46,7 +49,8 @@ const TopCategoriesAndBrands = () => {
         });
     };
 
-    const renderCategoryAndBrandsList = (title, dataList, queryType) => {
+    const renderCategoryAndBrandsList = (all_data, title, dataList, queryType) => {
+        console.log(all_data);
         return (
             <>
                 <Grid container style={{fontWeight: "bold",
@@ -64,8 +68,9 @@ const TopCategoriesAndBrands = () => {
 
     return (
         <>
-            {renderCategoryAndBrandsList("#Shop Top Brands", homeAPIData.data.brands, queryType.brand)}
-            {renderCategoryAndBrandsList("#Shop Top Categories", homeAPIData.data.apparels, queryType.apparel)}
+            {renderCategoryAndBrandsList(homeAPIData.data, "#Recommendations", homeAPIData.data.products, queryType.product)}
+            {renderCategoryAndBrandsList(homeAPIData.data, "#Shop Top Brands", homeAPIData.data.brands, queryType.brand)}
+            {renderCategoryAndBrandsList(homeAPIData.data, "#Shop Top Categories", homeAPIData.data.apparels, queryType.apparel)}
         </>
     )
 };
