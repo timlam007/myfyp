@@ -7,8 +7,7 @@ import {useSelector} from "react-redux";
 
 const queryType = {
     brand: 1,
-    apparel: 2,
-    recommendation: 3
+    apparel: 2
 }
 
 const TopCategoriesAndBrands = () => {
@@ -24,44 +23,30 @@ const TopCategoriesAndBrands = () => {
             switch (filterQueryType) {
                 case queryType.brand:
                     filterQuery = info.brandInfo ? `brands=${info.brandInfo.id}` : null
-                    log.trace(`[TopCategoriesAndBrands]: filterQuery = ${filterQuery}, filterQueryType = ${filterQueryType}`)
-                    return (
-                        <Grid item xs={6} sm={2} key={info.title} style={{textAlign: "center"}}>
-                            <Link to={`/products?q=${filterQuery}::page=0,${MAX_PRODUCTS_PER_PAGE}`}>
-                                <img src={info.imageURL} alt={info.imageLocalPath} style={{width: '80%', height: '100%'}}
-                                    title={info.title}/>
-                            </Link>
-                        </Grid>
-                    )
+                    break
                 case queryType.apparel:
                     if (info.apparelInfo && info.genderInfo) {
                         filterQuery = `apparels=${info.apparelInfo.id}::genders=${info.genderInfo.id}`
                     }
-                    log.trace(`[TopCategoriesAndBrands]: filterQuery = ${filterQuery}, filterQueryType = ${filterQueryType}`)
-                    return (
-                        <Grid item xs={6} sm={2} key={info.title} style={{textAlign: "center"}}>
-                            <Link to={`/products?q=${filterQuery}::page=0,${MAX_PRODUCTS_PER_PAGE}`}>
-                                <img src={info.imageURL} alt={info.imageLocalPath} style={{width: '80%', height: '100%'}}
-                                    title={info.title}/>
-                            </Link>
-                        </Grid>
-                    )
-                case queryType.recommendation:
-                    return (
-                        ""
-                    )
                     break
                 default:
                     log.error("[TopCategoriesAndBrands]: filterQueryType is unsupported = " + filterQueryType)
                     return null
             }
 
-            
+            log.trace(`[TopCategoriesAndBrands]: filterQuery = ${filterQuery}, filterQueryType = ${filterQueryType}`)
+            return (
+                <Grid item xs={6} sm={2} key={info.title} style={{textAlign: "center"}}>
+                    <Link to={`/products?q=${filterQuery}::page=0,${MAX_PRODUCTS_PER_PAGE}`}>
+                        <img src={info.imageURL} alt={info.imageLocalPath} style={{width: '80%', height: '100%'}}
+                             title={info.title}/>
+                    </Link>
+                </Grid>
+            )
         });
     };
 
     const renderCategoryAndBrandsList = (title, dataList, queryType) => {
-        console.log("ye hai data === ", dataList);
         return (
             <>
                 <Grid container style={{fontWeight: "bold",
@@ -79,8 +64,7 @@ const TopCategoriesAndBrands = () => {
 
     return (
         <>
-            {renderCategoryAndBrandsList("#Recoomendations", homeAPIData.data.apparels, queryType.recommendation)}
-            {renderCategoryAndBrandsList("#Shop Top Brands", homeAPIData.data.products, queryType.brand)}
+            {renderCategoryAndBrandsList("#Shop Top Brands", homeAPIData.data.brands, queryType.brand)}
             {renderCategoryAndBrandsList("#Shop Top Categories", homeAPIData.data.apparels, queryType.apparel)}
         </>
     )

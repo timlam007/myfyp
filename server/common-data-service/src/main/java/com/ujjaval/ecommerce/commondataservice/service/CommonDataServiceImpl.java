@@ -4,12 +4,10 @@ import com.ujjaval.ecommerce.commondataservice.dao.sql.categories.*;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.images.BrandImagesRepository;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.images.CarouselImagesRepository;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.images.ApparelImagesRepository;
-import com.ujjaval.ecommerce.commondataservice.dao.sql.images.ProductImagesRepository;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.info.*;
 import com.ujjaval.ecommerce.commondataservice.dto.*;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.images.BrandImages;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.images.CarouselImages;
-import com.ujjaval.ecommerce.commondataservice.entity.sql.images.ProductImages;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.images.ApparelImages;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.ProductInfo;
 import com.ujjaval.ecommerce.commondataservice.model.FilterAttributesResponse;
@@ -47,9 +45,6 @@ public class CommonDataServiceImpl implements CommonDataService {
 
     @Autowired
     private ApparelImagesRepository apparelImagesRepository;
-
-    @Autowired
-    private ProductImagesRepository productImagesRepository;
 
     @Autowired
     private CarouselImagesRepository carouselImagesRepository;
@@ -92,14 +87,9 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<ApparelImagesDTO> apparelDTOList = modelMapper.map(apparelList, listType);
 
-        List<ProductImages> productList = productImagesRepository.getAllData();
-        listType = new TypeToken<List<ProductImagesDTO>>() {
-        }.getType();
-        List<ProductImagesDTO> productDTOList = modelMapper.map(productList, listType);
-
         List<CarouselImages> carouselList = carouselImagesRepository.getAllData();
 
-        return new MainScreenResponse(brandDTOList, apparelDTOList, carouselList, productDTOList);
+        return new MainScreenResponse(brandDTOList, apparelDTOList, carouselList);
     }
 
     @Cacheable(key = "#queryParams", value = "filterAttributesResponse")
