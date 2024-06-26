@@ -82,10 +82,10 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
-        List<BrandImages> productList = brandImagesRepository.getAllData();
-        listType = new TypeToken<List<BrandImagesDTO>>() {
+        List<ProductInfo> productList = productInfoRepository.getAllData();
+        listType = new TypeToken<List<ProductInfoDTO>>() {
         }.getType();
-        List<BrandImagesDTO> productDTOList = modelMapper.map(productList, listType);
+        List<ProductInfoDTO> productDTOList = modelMapper.map(productList, listType);
 
         List<ApparelImages> apparelList = apparelImagesRepository.getAllData();
         listType = new TypeToken<List<ApparelImagesDTO>>() {

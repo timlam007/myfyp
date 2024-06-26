@@ -1,5 +1,6 @@
 package com.ujjaval.ecommerce.commondataservice.model;
 
+import com.ujjaval.ecommerce.commondataservice.dto.ProductInfoDTO;
 import com.ujjaval.ecommerce.commondataservice.dto.BrandImagesDTO;
 import com.ujjaval.ecommerce.commondataservice.dto.ApparelImagesDTO;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.images.CarouselImages;
@@ -18,12 +19,12 @@ import java.util.List;
 public class MainScreenResponse implements Serializable {
 
     private List<BrandImagesDTO> brands;
-    private List<BrandImagesDTO> products;
+    private List<ProductInfoDTO> products;
     private List<ApparelImagesDTO> apparels;
     private List<CarouselImages> carousels;
 
     public MainScreenResponse(List<BrandImagesDTO> brands,
-                                List<BrandImagesDTO> products,
+                                List<ProductInfoDTO> products,
                                 List<ApparelImagesDTO> apparels,
                                 List<CarouselImages> carousels) {
         this.brands = brands;

@@ -70,6 +70,12 @@ public class ProductInfoRepositoryImpl {
         return query.getResultList();
     }
 
+    public List<ProductInfo> getAllData() {
+        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p LIMIT 10", ProductInfo.class);
+
+        return query.getResultList();
+    }
+
     private ParamsToQueryContext filterAndGetConditionMap(ProductQueryHelper productQueryHelper,
                                                           HashMap<String, String> conditionMap,
                                                           String queryParam) {
