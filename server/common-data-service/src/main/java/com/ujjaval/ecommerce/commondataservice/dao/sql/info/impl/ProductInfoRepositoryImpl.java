@@ -71,7 +71,8 @@ public class ProductInfoRepositoryImpl {
     }
 
     public List<ProductInfo> getAllData() {
-        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p LIMIT 10", ProductInfo.class);
+        TypedQuery<ProductInfo> query = entityManager.createQuery(
+                "SELECT p FROM ProductInfo p WHERE p.id < 10", ProductInfo.class);
 
         return query.getResultList();
     }
