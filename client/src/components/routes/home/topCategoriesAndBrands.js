@@ -88,17 +88,19 @@ const TopCategoriesAndBrands = () => {
     };
 
     const renderCategoryAndBrandsList = (title, dataList, queryType) => {
-        return (
-            <>
-                <Grid container style={{fontWeight: "bold",
-                    fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
-                    {title}
-                </Grid>
-                <Grid container style={{padding: '2rem 2rem'}}>
-                    {renderImageList(dataList, queryType)}
-                </Grid>
-            </>
-        )
+        if (dataList.length) {
+            return (
+                <>
+                    <Grid container style={{fontWeight: "bold",
+                        fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
+                        {title}
+                    </Grid>
+                    <Grid container style={{padding: '2rem 2rem'}}>
+                        {renderImageList(dataList, queryType)}
+                    </Grid>
+                </>
+            )
+        }
     }
 
     log.info("[TopCategoriesAndBrands]: Rendering TopCategoriesAndBrands Component")

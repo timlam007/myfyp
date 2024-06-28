@@ -73,7 +73,7 @@ public class ProductInfoRepositoryImpl {
     public List<ProductInfo> getAllData(String queryParams) {
 
         if(queryParams == null || queryParams == "" || queryParams == "0"){
-                TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND() LIMIT 10", ProductInfo.class);
+                TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND()", ProductInfo.class);
                 return query.getResultList();
         }
         else{
