@@ -67,7 +67,7 @@ public class ProductInfo implements Serializable {
 
     @OneToMany(mappedBy = "orderInfo")
     @JsonIgnore
-    private List<OrderInfo> orders;
+    public List<OrderInfo> orders;
 
     private String imageURL;
 

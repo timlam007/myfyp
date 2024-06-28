@@ -70,11 +70,42 @@ public class ProductInfoRepositoryImpl {
         return query.getResultList();
     }
 
-    public List<ProductInfo> getAllData() {
-        TypedQuery<ProductInfo> query = entityManager.createQuery(
-                "SELECT p FROM ProductInfo p WHERE p.id < 10", ProductInfo.class);
+    public List<ProductInfo> getAllData(String queryParams) {
 
-        return query.getResultList();
+        if(queryParams == null || queryParams == "" || queryParams == "0"){
+                TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND() LIMIT 10", ProductInfo.class);
+                return query.getResultList();
+        }
+        else{
+                List<ProductInfo> result = new ArrayList<>();
+                List<String> visited_product_ids = Arrays.asList(queryParams.split(","));
+                List<Integer> productIds = new ArrayList<>();
+
+                for (String id : visited_product_ids) {
+                        productIds.add(Integer.valueOf(id));
+                }
+
+                Collections.reverse(productIds);
+
+                for(Integer id : productIds){
+                        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.productBrandCategory IN (SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) AND p.priceRangeCategory.id IN (SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2))", ProductInfo.class);
+                        query.setParameter(1, id);
+                        query.setParameter(2, id);
+                        List<ProductInfo> temp = query.getResultList();
+                        Collections.sort(temp, new Comparator<ProductInfo>() {
+                                @Override
+                                public int compare(ProductInfo o1, ProductInfo o2) {
+                                        return Integer.compare(o1.orders.size(), o2.orders.size());
+                                }
+                        });
+                        Collections.reverse(temp);
+                        result.addAll(temp);
+                        
+                }
+
+                return result;
+                
+        }
     }
 
     private ParamsToQueryContext filterAndGetConditionMap(ProductQueryHelper productQueryHelper,
