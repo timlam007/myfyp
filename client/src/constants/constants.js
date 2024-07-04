@@ -47,5 +47,5 @@ export const PAGE_ATTRIBUTE = "page"
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'];
 
-export const HOME_PAGE_API_OBJECT_LEN = 3;
+export const HOME_PAGE_API_OBJECT_LEN = 4;
 export const TABS_API_OBJECT_LEN = 6;

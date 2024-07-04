@@ -25,6 +25,8 @@ jobs:
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/api/service_api.js"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/actions/index.js"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/server/search-suggestion-service/src/main/java/com/ujjaval/ecommerce/searchsuggestionservice/config/CorsConfig.java"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/.env"
+
 
     - name: Build the images
       env:

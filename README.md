@@ -8,7 +8,7 @@ Docker compose build
 Docker compose up -d
 
 
-open  localhost port 3000
+open 100.26.152.29 port 3000
 
 
 change .env-sample file to .env 

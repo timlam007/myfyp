@@ -18,6 +18,8 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfo, Intege
 
     List<ProductInfo> getProductsById(String[] productIds);
 
+    List<ProductInfo> getAllData(String queryParams);
+
     FilterAttributesResponse getFilterAttributesByProducts(HashMap<String, String> conditionMap);
 
     HomeTabsDataResponse getBrandsAndApparelsByGender();

@@ -24,7 +24,7 @@ script:
   - export SEARCH_SUGGESTION_SERVICE_PORT=8083
   - export PAYMENT_SERVICE_PORT=8084
   - export REDIS_PORT=6379
-  - export REACT_CLIENT_URL=http://localhost:3000
+  - export REACT_CLIENT_URL=http://EC2_MINIKUBE_SERVER_IP:3000
   - docker-compose -f docker-compose.yml up --build
 
 after_script:

@@ -50,7 +50,12 @@ const Home = props => {
 
 
         if (!homeAPIData.hasOwnProperty("data")) {
-            props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, null, false);
+            if(localStorage.getItem("visited_product_id") === null){
+                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids=0", false);
+            }
+            else{
+                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids="+JSON.parse(localStorage.getItem("visited_product_id")).join(','), false);
+            }
         }
 
         // eslint-disable-next-line

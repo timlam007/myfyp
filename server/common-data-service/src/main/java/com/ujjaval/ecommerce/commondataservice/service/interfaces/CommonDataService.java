@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public interface CommonDataService {
 
-    MainScreenResponse getHomeScreenData(String apiName);
+    MainScreenResponse getHomeScreenData(String apiName, String queryParams);
 
     FilterAttributesResponse getFilterAttributesByProducts(String queryParams);
 

@@ -75,12 +75,17 @@ public class CommonDataServiceImpl implements CommonDataService {
     }
 
     @Cacheable(key = "#apiName", value = "mainScreenResponse")
-    public MainScreenResponse getHomeScreenData(String apiName) {
+    public MainScreenResponse getHomeScreenData(String apiName, String queryParams) {
 
         List<BrandImages> brandList = brandImagesRepository.getAllData();
         Type listType = new TypeToken<List<BrandImagesDTO>>() {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
+
+        List<ProductInfo> productList = productInfoRepository.getAllData(queryParams);
+        listType = new TypeToken<List<ProductDTO>>() {
+        }.getType();
+        List<ProductDTO> productDTOList = modelMapper.map(productList, listType);
 
         List<ApparelImages> apparelList = apparelImagesRepository.getAllData();
         listType = new TypeToken<List<ApparelImagesDTO>>() {
@@ -89,7 +94,7 @@ public class CommonDataServiceImpl implements CommonDataService {
 
         List<CarouselImages> carouselList = carouselImagesRepository.getAllData();
 
-        return new MainScreenResponse(brandDTOList, apparelDTOList, carouselList);
+        return new MainScreenResponse(brandDTOList, productDTOList, apparelDTOList, carouselList);
     }
 
     @Cacheable(key = "#queryParams", value = "filterAttributesResponse")
