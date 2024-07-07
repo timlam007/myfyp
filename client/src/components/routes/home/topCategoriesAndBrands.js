@@ -59,7 +59,7 @@ const TopCategoriesAndBrands = () => {
                                         title={info.name}/>
                                 </Link>
                             </Grid>
-                            <Grid item style={{fontSize: "14px", color: "grey"}}>
+                            <Grid item style={{fontSize: "14px", color: "grey", maxWidth: '100%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                                 {info.name}
                             </Grid>
                             <Grid item style={{fontSize: "16px", fontWeight: "bold"}}>
