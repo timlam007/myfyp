@@ -34,7 +34,7 @@ services:
     depends_on:
       - mysql-db
       - redis-cache
-      - react-ui
+#      - react-ui
     environment:
       - DB_HOST=mysql-db
       - DB_PORT=${DB_PORT}
@@ -61,7 +61,7 @@ services:
     depends_on:
       - mysql-db
       - redis-cache
-      - react-ui
+#      - react-ui
     environment:
       - DB_HOST=mysql-db
       - DB_PORT=${DB_PORT}
@@ -92,7 +92,7 @@ services:
     depends_on:
       - mysql-db
       - redis-cache
-      - react-ui
+#      - react-ui
       - common-data-service
       - authentication-service
       - payment-service
@@ -116,7 +116,7 @@ services:
     depends_on:
       - mysql-db
       - redis-cache
-      - react-ui
+#      - react-ui
     environment:
       - DB_HOST=mysql-db
       - DB_PORT=${DB_PORT}
@@ -133,29 +133,30 @@ services:
       - ${PAYMENT_SERVICE_PORT}:${PAYMENT_SERVICE_PORT}
     networks:
       - microservice
-  react-ui:
-    build:
-      context: .
-      dockerfile: ./client/Dockerfile
-    container_name: react-service-container
-    stdin_open: true
-    restart: always
-    expose:
-      - ${REACT_APP_PORT}
-    ports:
-      - ${REACT_APP_PORT}:${REACT_APP_PORT}
-    environment:
-      - REACT_APP_STRIPE_PUBLISH_KEY=${REACT_APP_STRIPE_PUBLISH_KEY}
-      - REACT_APP_COMMON_DATA_SERVICE_PORT=${COMMON_DATA_SERVICE_PORT}
-      - REACT_APP_ENVIRONMENT=${REACT_APP_ENVIRONMENT}
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - mysql-db
-      - redis-cache
-    networks:
-      - microservice
+#  react-ui:
+#    build:
+#      context: .
+#      dockerfile: ./client/Dockerfile
+#    container_name: react-service-container
+#    stdin_open: true
+#    restart: always
+#    expose:
+#      - ${REACT_APP_PORT}
+#    ports:
+#      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+#    environment:
+#      - REACT_APP_STRIPE_PUBLISH_KEY=${REACT_APP_STRIPE_PUBLISH_KEY}
+#      - REACT_APP_COMMON_DATA_SERVICE_PORT=${COMMON_DATA_SERVICE_PORT}
+#      - REACT_APP_ENVIRONMENT=${REACT_APP_ENVIRONMENT}
+#    volumes:
+#      - ./client:/usr/src/app
+#      - /usr/src/app/node_modules
+#    depends_on:
+#      - mysql-db
+#      - redis-cache
+#    networks:
+#      - microservice
 networks:
   microservice:
     external: true
+

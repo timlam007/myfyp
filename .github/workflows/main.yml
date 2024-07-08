@@ -35,8 +35,8 @@ jobs:
           EC2_MINIKUBE_SERVER_IP: ${{ vars.REACT_CLIENT_URL_SECRET }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo docker compose build"
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/client && sudo docker build -t hassanhbahmed/react-ui:latest ."
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo docker compose -f docker-compose-minikube.yml build"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/client && sudo docker build -f Dockerfile-minikube -t hassanhbahmed/react-ui:latest ."
 
 
     - name: Tagging the images
