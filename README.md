@@ -1,3 +1,5 @@
+Dockerfile and docker compose file are different for docker compose and minikube
+
 # myfyp
 To run this project download docker
 # step 1:
