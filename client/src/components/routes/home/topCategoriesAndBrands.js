@@ -55,7 +55,7 @@ const TopCategoriesAndBrands = () => {
                             <Grid item>
                                 <Link to={`${DETAILS_ROUTE}?q=product_id=${info.id}`}>
                                     <img src={info.imageURL} alt={info.name}
-                                        style={{height: "250%", width: "100%"}}
+                                        style={{height: "100%", width: "100%"}}
                                         title={info.name}/>
                                 </Link>
                             </Grid>
