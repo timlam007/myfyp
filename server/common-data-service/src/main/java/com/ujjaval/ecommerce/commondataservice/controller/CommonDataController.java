@@ -51,7 +51,8 @@ public class CommonDataController {
 
     @GetMapping(value = "/products", params = "product_id")
     public ResponseEntity<?> getProductsById(@RequestParam("product_id") String queryParams) {
-
+        
+        
         HashMap<Integer, ProductInfo> resultMap = commonDataService.getProductsById(queryParams);
 
         if (resultMap == null) {
