@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.VisitedProducts;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.info.VisitedProductsRepository;
 import com.ujjaval.ecommerce.commondataservice.dao.sql.images.ApparelImagesRepository;
+import java.util.*;
 
 @Service
 public class VisitedProductsService {
@@ -17,14 +18,17 @@ public class VisitedProductsService {
     }
 
     public String saveVisitedProducts(String visitedProducts) {
-        System.out.println("%%%%%%%%%%%%%% is mein agaya ye save krne service mein ^^^^^^^^^^");
         // return visitedProductsRepository.save(visitedProducts);
         return "1223";
     }
 
-    public List<int> findByUserId(int userId) {
-        int[] product_ids = VisitedProductsRepository.getProductIdsByUserId(userId);
-
+    public List<Integer> findByUserId(Integer userId) {
+        System.out.println("service ke function mein visited product ids lene agaye");
+        List<Integer> product_ids = VisitedProductsRepository.getProductIdsByUserId(userId);
+        
+        System.out.println("repo se service mein product ids agayi");
+        System.out.println(product_ids);
+        
         return product_ids;
     }
 

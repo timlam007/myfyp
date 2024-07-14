@@ -15,6 +15,7 @@ import com.ujjaval.ecommerce.commondataservice.model.HomeTabsDataResponse;
 import com.ujjaval.ecommerce.commondataservice.model.MainScreenResponse;
 import com.ujjaval.ecommerce.commondataservice.model.SearchSuggestionResponse;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.CommonDataService;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductsService;
 import org.javatuples.Pair;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -42,6 +43,9 @@ public class CommonDataServiceImpl implements CommonDataService {
 
     @Autowired
     private BrandImagesRepository brandImagesRepository;
+
+    @Autowired
+    private VisitedProductsService visitedProductsService;
 
     @Autowired
     private ApparelImagesRepository apparelImagesRepository;
@@ -82,7 +86,14 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
-        List<ProductInfo> productList = productInfoRepository.getAllData(queryParams);
+        System.out.println("Api mein data lene agaye");
+
+        List<Integer> visitedProductIds = visitedProductsService.findByUserId(1);
+
+        System.out.println("product_ids ye mili --- jo user ne visit ki hein");
+        System.out.println(visitedProductIds);
+
+        List<ProductInfo> productList = productInfoRepository.getAllData(visitedProductIds);
         listType = new TypeToken<List<ProductDTO>>() {
         }.getType();
         List<ProductDTO> productDTOList = modelMapper.map(productList, listType);

@@ -22,8 +22,7 @@ public class ProductInfoRepositoryImpl {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    VisitedProductsService visitedProductsService;
+    private VisitedProductsService visitedProductsService;
 
     public Pair<Long, List<ProductInfo>> getProductsByCategories(HashMap<String, String> conditionMap) {
         ParamsToQueryContext paramsToQueryContext = new ProductQueryHelper().getParamsToQueryMap(conditionMap);
@@ -77,24 +76,24 @@ public class ProductInfoRepositoryImpl {
         return query.getResultList();
     }
 
-    public List<ProductInfo> getAllData(String queryParams) {
+    public List<ProductInfo> getAllData(List<Integer> visited_product_ids) {
 
-        if(queryParams == null || queryParams == "" || queryParams == "0"){
+        if(visited_product_ids.isEmpty()){
                 TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND()", ProductInfo.class);
                 return query.getResultList();
         }
         else{
                 List<ProductInfo> result = new ArrayList<>();
-                List<String> visited_product_ids = Arrays.asList(queryParams.split(","));
-                List<Integer> productIds = new ArrayList<>();
+                // List<String> visited_product_ids = Arrays.asList(queryParams.split(","));
+                // List<Integer> productIds = new ArrayList<>();
 
-                for (String id : visited_product_ids) {
-                        productIds.add(Integer.valueOf(id));
-                }
+                // for (String id : visited_product_ids) {
+                //         productIds.add(Integer.valueOf(id));
+                // }
 
-                Collections.reverse(productIds);
+                Collections.reverse(visited_product_ids);
 
-                for(Integer id : productIds){
+                for(Integer id : visited_product_ids){
                         TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.productBrandCategory IN (SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) AND p.priceRangeCategory.id IN (SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2))", ProductInfo.class);
                         query.setParameter(1, id);
                         query.setParameter(2, id);

@@ -17,9 +17,9 @@ public class VisitedProducts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public Integer id;
 
-    private int product_id;
-    private int user_id;
+    public Integer product_id;
+    public Integer user_id;
 
 }
