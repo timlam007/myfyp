@@ -23,6 +23,7 @@ import {Grid} from "@material-ui/core";
 const Home = props => {
     const {hover} = useSelector(state => state.tabHoverEventReducer)
     const homeAPIData = useSelector(state => state.homePageDataReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
 
     // Main screen API is loaded during Component Did mount
     useEffect(() => {
@@ -33,7 +34,12 @@ const Home = props => {
         // Heroku so that it serves the requests quickly.
         // This should be removed when the app is deployed on actual server.
         props.setDefaultSearchSuggestions()
-        authServiceAPI.post('/authenticate').catch(err => {
+        authServiceAPI.post('/authenticate')
+        .then(response => {
+            console.log("ye hai woh data...");
+            console.log(response.data);
+        })
+        .catch(err => {
         })
         if (process.env.REACT_APP_PAYMENT_SERVICE_URL) {
             axios({
@@ -50,12 +56,7 @@ const Home = props => {
 
 
         if (!homeAPIData.hasOwnProperty("data")) {
-            if(localStorage.getItem("visited_product_id") === null){
-                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids=0", false);
-            }
-            else{
-                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids="+JSON.parse(localStorage.getItem("visited_product_id")).join(','), false);
-            }
+            props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?user_id=3", false);
         }
 
         // eslint-disable-next-line

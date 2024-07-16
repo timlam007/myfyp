@@ -41,8 +41,7 @@ import {
 import _ from "lodash";
 
 
-export const signInReducer = (state
-                                  = {isSignedIn: null, timestamp: null, firstName: null}, action) => {
+export const signInReducer = (state = {isSignedIn: null, timestamp: null, firstName: null, id: null}, action) => {
 
     // timestamp is used to update the state so that
     // we can stop loading progress component
@@ -50,7 +49,7 @@ export const signInReducer = (state
         case HANDLE_SIGN_IN:
             return {
                 ...state, isSignedIn: true, tokenId: action.payload.jwt, errorMsg: null,
-                firstName: action.payload.firstName, timestamp: Date.now()
+                firstName: action.payload.firstName, id: action.payload.id, timestamp: Date.now()
             };
         case HANDLE_SIGN_IN_ERROR:
             return {...state, isSignedIn: false, errorMsg: action.payload, timestamp: Date.now()};

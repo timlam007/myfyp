@@ -25,19 +25,18 @@ public interface VisitedProductsRepository extends JpaRepository<VisitedProducts
 
         List<Integer> productIds = new ArrayList<>();
 
-        // TypedQuery<VisitedProducts> query = entityManager.createQuery("SELECT p FROM VisitedProducts p WHERE p.user_id = (?1)", VisitedProducts.class);
-        // query.setParameter(1, user_id);
+        TypedQuery<VisitedProducts> query = entityManager.createQuery("SELECT p FROM VisitedProducts p WHERE p.user_id = (?1))", VisitedProducts.class);
+        query.setParameter(1, String.valueOf(user_id));
+        List<VisitedProducts> prods = query.getResultList();
 
-        // List<VisitedProducts> prods = query.getResultList();
+        System.out.println("query chal chuki hai.. ye woh prods hein");
+        System.out.println(prods);
 
-        // System.out.println("query chal chuki hai.. ye woh prods hein");
-        // System.out.println(prods);
-
-        // for (VisitedProducts obj : prods) {
-        //         System.out.println("ye product mil hai ek tou...");
-        //         System.out.println(obj.product_id);
-        //         productIds.add(obj.product_id);
-        // }
+        for (VisitedProducts obj : prods) {
+                System.out.println("ye product mil hai ek tou...");
+                System.out.println(obj.productId);
+                productIds.add(obj.productId);
+        }
 
         productIds.add(1);
         System.out.println("product ids ka array ban gaya");

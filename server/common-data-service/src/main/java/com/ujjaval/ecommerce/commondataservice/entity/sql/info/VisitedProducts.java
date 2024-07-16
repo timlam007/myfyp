@@ -1,6 +1,10 @@
 package com.ujjaval.ecommerce.commondataservice.entity.sql.info;
 
 import com.fasterxml.jackson.annotation.*;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.categories.ApparelCategory;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.categories.GenderCategory;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.categories.PriceRangeCategory;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.categories.ProductBrandCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,15 +15,23 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Entity
-@Table(name = "visited_products")  // Specify the table name if different from class name
-public class VisitedProducts {
+@Table(indexes = {@Index(columnList = "user_id")})
+public class VisitedProducts implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private int id;
 
-    public Integer product_id;
-    public Integer user_id;
+    public int userId;
+    public int productId;
 
+    public VisitedProducts(int userId, int productId) {
+        this.userId = userId;
+        this.productId = productId;
+    }
 }

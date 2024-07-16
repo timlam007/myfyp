@@ -62,9 +62,9 @@ public class CommonDataController {
         return ResponseEntity.ok(resultMap);
     }
 
-    @GetMapping(value = "/home", params = "visited_product_ids")
-    public ResponseEntity<?> getMainScreenData(@RequestParam("visited_product_ids") String queryParams) {
-        MainScreenResponse mainScreenInfoList = commonDataService.getHomeScreenData("homeAPI", queryParams);
+    @GetMapping(value = "/home", params = "user_id")
+    public ResponseEntity<?> getMainScreenData(@RequestParam("user_id") String userId) {
+        MainScreenResponse mainScreenInfoList = commonDataService.getHomeScreenData("homeAPI", userId);
         if (mainScreenInfoList == null) {
             return new ResponseEntity<Error>(HttpStatus.CONFLICT);
         }

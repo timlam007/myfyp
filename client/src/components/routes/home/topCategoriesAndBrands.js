@@ -9,6 +9,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import {DETAILS_ROUTE} from "../../../constants/react_routes";
 import history from "../../../history";
 import {SELECT_PRODUCT_DETAIL} from "../../../actions/types";
+import { signIn } from '../../../actions';
 
 const queryType = {
     brand: 1,
@@ -18,6 +19,7 @@ const queryType = {
 
 const TopCategoriesAndBrands = () => {
     const homeAPIData = useSelector(state => state.homePageDataReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
     const dispatch = useDispatch()
 
     const renderImageList = (imageList, filterQueryType) => {
@@ -88,6 +90,7 @@ const TopCategoriesAndBrands = () => {
     };
 
     const renderCategoryAndBrandsList = (title, dataList, queryType) => {
+        console.log("user id  = ", id);
         if (dataList.length) {
             return (
                 <>

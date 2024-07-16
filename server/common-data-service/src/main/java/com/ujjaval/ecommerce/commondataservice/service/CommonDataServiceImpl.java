@@ -79,16 +79,24 @@ public class CommonDataServiceImpl implements CommonDataService {
     }
 
     @Cacheable(key = "#apiName", value = "mainScreenResponse")
-    public MainScreenResponse getHomeScreenData(String apiName, String queryParams) {
+    public MainScreenResponse getHomeScreenData(String apiName, String userId) {
 
         List<BrandImages> brandList = brandImagesRepository.getAllData();
         Type listType = new TypeToken<List<BrandImagesDTO>>() {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
-        System.out.println("Api mein data lene agaye");
+        System.out.println("Api mein data lene agaye.. ye query param mila hai");
+        System.out.println(userId);
 
-        List<Integer> visitedProductIds = visitedProductsService.findByUserId(1);
+        List<Integer> visitedProductIds = new ArrayList();
+        if(userId != null){
+            visitedProductIds = visitedProductsService.findByUserId(Integer.parseInt(userId));
+        }
+        else{
+            visitedProductIds = visitedProductsService.findByUserId(0);
+        }
+        
 
         System.out.println("product_ids ye mili --- jo user ne visit ki hein");
         System.out.println(visitedProductIds);
