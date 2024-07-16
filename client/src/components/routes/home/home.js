@@ -56,7 +56,7 @@ const Home = props => {
 
 
         if (!homeAPIData.hasOwnProperty("data")) {
-            props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?user_id=3", false);
+            props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?user_id=1", false);
         }
 
         // eslint-disable-next-line

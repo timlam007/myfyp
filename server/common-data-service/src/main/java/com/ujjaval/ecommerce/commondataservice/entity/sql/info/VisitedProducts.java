@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(indexes = {@Index(columnList = "user_id")})
+@Table(name = "visited_products")
 public class VisitedProducts implements Serializable {
 
     @Id
