@@ -89,20 +89,37 @@ const TopCategoriesAndBrands = () => {
         });
     };
 
-    const renderCategoryAndBrandsList = (title, dataList, queryType) => {
+    const renderCategoryAndBrandsList = (title, dataList, qType) => {
         console.log("user id  = ", id);
         if (dataList.length) {
-            return (
-                <>
-                    <Grid container style={{fontWeight: "bold",
-                        fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
-                        {title}
-                    </Grid>
-                    <Grid container style={{padding: '2rem 2rem'}}>
-                        {renderImageList(dataList, queryType)}
-                    </Grid>
-                </>
-            )
+            if(qType != queryType.product){
+                return (
+                    <>
+                        <Grid container style={{fontWeight: "bold",
+                            fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
+                            {title}
+                        </Grid>
+                        <Grid container style={{padding: '2rem 2rem'}}>
+                            {renderImageList(dataList, qType)}
+                        </Grid>
+                    </>
+                )
+            }
+            else{
+                if(isSignedIn){
+                    return (
+                        <>
+                            <Grid container style={{fontWeight: "bold",
+                                fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
+                                {title}
+                            </Grid>
+                            <Grid container style={{padding: '2rem 2rem'}}>
+                                {renderImageList(dataList, qType)}
+                            </Grid>
+                        </>
+                    )
+                }
+            }
         }
     }
 
