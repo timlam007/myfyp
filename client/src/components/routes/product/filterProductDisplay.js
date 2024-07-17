@@ -16,6 +16,7 @@ import {SearchMatchesNotFound} from "../../ui/error/searchMatchesNotFound";
 
 const FilterProductDisplay = props => {
         const filterProductsReducer = useSelector(state => state.filterProductsReducer)
+        const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
         let filterProducts = null
         const dispatch = useDispatch()
         log.info(`[FilterProductDisplay] Rendering...`)
@@ -91,18 +92,10 @@ const FilterProductDisplay = props => {
                 return (
                     <Grid item container direction="column" spacing={1} xs={6} sm={4} md={4} lg={3} key={info.id}>
                         <Grid item>
-                            <Link to={`${DETAILS_ROUTE}${history.location.search}::product_id=${info.id}`}
-                                  onClick={handleImageClick(info)}>
+                            <Link to={`${DETAILS_ROUTE}?q=product_id=${info.id}`}>
                                 <img src={info.imageURL} alt={info.name}
                                      style={{height: "250px", width: "100%"}}
                                      title={info.name}/>
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link to={`${PRODUCTS_ROUTE}?q=brand=${info.productBrandCategory.id}`}>
-                                <div style={{color: 'black', fontSize: "16px", fontWeight: "bold"}}>
-                                    {info.productBrandCategory.type}
-                                </div>
                             </Link>
                         </Grid>
                         <Grid item style={{fontSize: "14px", color: "grey", maxWidth: '100%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>

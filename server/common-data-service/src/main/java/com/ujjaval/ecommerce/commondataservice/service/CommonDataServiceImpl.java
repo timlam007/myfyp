@@ -15,7 +15,7 @@ import com.ujjaval.ecommerce.commondataservice.model.HomeTabsDataResponse;
 import com.ujjaval.ecommerce.commondataservice.model.MainScreenResponse;
 import com.ujjaval.ecommerce.commondataservice.model.SearchSuggestionResponse;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.CommonDataService;
-import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductsService;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductService;
 import org.javatuples.Pair;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -45,7 +45,7 @@ public class CommonDataServiceImpl implements CommonDataService {
     private BrandImagesRepository brandImagesRepository;
 
     @Autowired
-    private VisitedProductsService visitedProductsService;
+    private VisitedProductService visitedProductService;
 
     @Autowired
     private ApparelImagesRepository apparelImagesRepository;
@@ -89,12 +89,12 @@ public class CommonDataServiceImpl implements CommonDataService {
         System.out.println("Api mein data lene agaye.. ye query param mila hai");
         System.out.println(userId);
 
-        List<Integer> visitedProductIds = new ArrayList();
+        List<Integer> visitedProductIds = Collections.emptyList();
         if(userId != null){
-            visitedProductIds = visitedProductsService.findByUserId(Integer.parseInt(userId));
+            visitedProductIds = visitedProductService.getProductIdsByUserId(Integer.parseInt(userId));
         }
         else{
-            visitedProductIds = visitedProductsService.findByUserId(0);
+            visitedProductIds = visitedProductService.getProductIdsByUserId(0);
         }
         
 

@@ -7,7 +7,7 @@ import com.ujjaval.ecommerce.commondataservice.entity.sql.info.ProductInfo;
 import com.ujjaval.ecommerce.commondataservice.model.FilterAttributesResponse;
 import com.ujjaval.ecommerce.commondataservice.model.HomeTabsDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductsService;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductService;
 import com.ujjaval.ecommerce.commondataservice.utils.resulttransformers.ListResultTransformer;
 import org.javatuples.Pair;
 
@@ -22,7 +22,7 @@ public class ProductInfoRepositoryImpl {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private VisitedProductsService visitedProductsService;
+    private VisitedProductService visitedProductService;
 
     public Pair<Long, List<ProductInfo>> getProductsByCategories(HashMap<String, String> conditionMap) {
         ParamsToQueryContext paramsToQueryContext = new ProductQueryHelper().getParamsToQueryMap(conditionMap);
@@ -65,12 +65,9 @@ public class ProductInfoRepositoryImpl {
 
         for (String id : product_ids_str) {
                 productIds.add(Integer.valueOf(id));
-                System.out.println("%%%%%%%%%%%%%% is mein agaya ye api krne controller mein ^^^^^^^^^^");
-                visitedProductsService.saveVisitedProducts(id);
         }
 
-        TypedQuery<ProductInfo> query = entityManager.createQuery(
-                "SELECT p FROM ProductInfo p WHERE p.id IN (?1)", ProductInfo.class);
+        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.id IN (?1)", ProductInfo.class);
         query.setParameter(1, productIds);
 
         return query.getResultList();
@@ -84,12 +81,6 @@ public class ProductInfoRepositoryImpl {
         }
         else{
                 List<ProductInfo> result = new ArrayList<>();
-                // List<String> visited_product_ids = Arrays.asList(queryParams.split(","));
-                // List<Integer> productIds = new ArrayList<>();
-
-                // for (String id : visited_product_ids) {
-                //         productIds.add(Integer.valueOf(id));
-                // }
 
                 Collections.reverse(visited_product_ids);
 
@@ -109,7 +100,10 @@ public class ProductInfoRepositoryImpl {
                         
                 }
 
-                return result;
+                Set<ProductInfo> set = new HashSet<>(result);
+                List<ProductInfo> response = new ArrayList<>(set);
+
+                return response;
                 
         }
     }
