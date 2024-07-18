@@ -90,7 +90,7 @@ const TopCategoriesAndBrands = () => {
     };
 
     const renderCategoryAndBrandsList = (title, dataList, qType) => {
-        console.log("user id  = ", id);
+        localStorage.setItem("user_id", id);
         if (dataList.length) {
             if(qType != queryType.product){
                 return (

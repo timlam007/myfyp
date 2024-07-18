@@ -262,7 +262,7 @@ export const getDataViaAPI = (type, route, query, synchronous = true) => async d
         let isFetchError = false
         if (synchronous) {
             await commonServiceAPI.get(route)
-                .then(response => processResponse(response, query, type, route))
+                .then(response => processResponse(response, query, type, route, dispatch))
                 .catch(err => {
                     isFetchError = true
                 });

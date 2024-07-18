@@ -57,16 +57,24 @@ public class CommonDataController {
         return ResponseEntity.ok(productInfoDTO);
     }
 
-    @GetMapping(value = "/products", params = {"product_id", "user_id"})
-    public ResponseEntity<?> getProductsById(@RequestParam("product_id") String productId, @RequestParam("user_id") String userId) {
+    @GetMapping(value = "/products", params = {"product_id"})
+    public ResponseEntity<?> getProductsById(@RequestParam("product_id") String productId, @RequestParam(value="user_id", defaultValue="0") String userId) {
         
-        System.out.println("ya product page pe doosri api hi hai");
+        System.out.println("ya product page pe doosri api hi hai..ye user id ban rahi hai");
+        System.out.println(userId);
 
-        if(!visitedProductService.visitedProductExists(Integer.valueOf(userId), Integer.valueOf(productId))) {
-            VisitedProduct visitedProduct = new VisitedProduct();
-            visitedProduct.setUserId(Integer.valueOf(userId));
-            visitedProduct.setProductId(Integer.valueOf(productId));
-            visitedProductService.saveVisitedProduct(visitedProduct);
+        try {
+            if(userId != "0" && userId != null){
+                if(!visitedProductService.visitedProductExists(Integer.valueOf(userId), Integer.valueOf(productId))) {
+                    VisitedProduct visitedProduct = new VisitedProduct();
+                    visitedProduct.setUserId(Integer.valueOf(userId));
+                    visitedProduct.setProductId(Integer.valueOf(productId));
+                    visitedProductService.saveVisitedProduct(visitedProduct);
+                }
+            }
+        }
+        catch(Exception e) {
+            
         }
         
         HashMap<Integer, ProductInfo> resultMap = commonDataService.getProductsById(productId);

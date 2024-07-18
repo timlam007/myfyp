@@ -62,6 +62,7 @@ export const signIn = formValues => async dispatch => {
             dispatch({type: HANDLE_SIGN_IN, payload: response.data});
             Cookies.set(AUTH_DETAILS_COOKIE, response.data, {expires: 2});
             history.push('/');
+            window.location.reload();
         } else {
             log.info(`[ACTION]: dispatch HANDLE_SIGN_IN_ERROR response.data.error = ${response.data.error}`)
             dispatch({type: HANDLE_SIGN_IN_ERROR, payload: response.data.error});
