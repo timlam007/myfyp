@@ -18,7 +18,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfo, Intege
 
     List<ProductInfo> getProductsById(String[] productIds);
 
-    List<ProductInfo> getAllData(List<Integer> visited_product_ids);
+    List<ProductInfo> getRecommendedProducts(List<Integer> visited_product_ids);
 
     FilterAttributesResponse getFilterAttributesByProducts(HashMap<String, String> conditionMap);
 

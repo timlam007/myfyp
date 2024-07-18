@@ -36,7 +36,6 @@ const Home = props => {
         props.setDefaultSearchSuggestions()
         authServiceAPI.post('/authenticate')
         .then(response => {
-            console.log("ye hai woh data...");
             console.log(response.data);
         })
         .catch(err => {

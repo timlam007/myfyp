@@ -86,9 +86,6 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
-        System.out.println("Api mein data lene agaye.. ye query param mila hai");
-        System.out.println(userId);
-
         List<Integer> visitedProductIds = Collections.emptyList();
         if(userId != null){
             visitedProductIds = visitedProductService.getProductIdsByUserId(Integer.parseInt(userId));
@@ -98,10 +95,7 @@ public class CommonDataServiceImpl implements CommonDataService {
         }
         
 
-        System.out.println("product_ids ye mili --- jo user ne visit ki hein");
-        System.out.println(visitedProductIds);
-
-        List<ProductInfo> productList = productInfoRepository.getAllData(visitedProductIds);
+        List<ProductInfo> productList = productInfoRepository.getRecommendedProducts(visitedProductIds);
         listType = new TypeToken<List<ProductDTO>>() {
         }.getType();
         List<ProductDTO> productDTOList = modelMapper.map(productList, listType);

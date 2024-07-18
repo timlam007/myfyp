@@ -73,7 +73,7 @@ public class ProductInfoRepositoryImpl {
         return query.getResultList();
     }
 
-    public List<ProductInfo> getAllData(List<Integer> visited_product_ids) {
+    public List<ProductInfo> getRecommendedProducts(List<Integer> visited_product_ids) {
 
         if(visited_product_ids.isEmpty()){
                 TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND()", ProductInfo.class);

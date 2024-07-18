@@ -48,8 +48,6 @@ public class CommonDataController {
 
         ProductInfoDTO productInfoDTO = commonDataService.getProductsByCategories(queryParams);
 
-        System.out.println("ye hai kya product page pe hit honay wali api??? is ke query param ye hein");
-
         if (productInfoDTO == null) {
             return ResponseEntity.badRequest().body("Query has not followed the required format.");
         }
@@ -59,9 +57,6 @@ public class CommonDataController {
 
     @GetMapping(value = "/products", params = {"product_id"})
     public ResponseEntity<?> getProductsById(@RequestParam("product_id") String productId, @RequestParam(value="user_id", defaultValue="0") String userId) {
-        
-        System.out.println("ya product page pe doosri api hi hai..ye user id ban rahi hai");
-        System.out.println(userId);
 
         try {
             if(userId != "0" && userId != null){
@@ -74,7 +69,7 @@ public class CommonDataController {
             }
         }
         catch(Exception e) {
-            
+
         }
         
         HashMap<Integer, ProductInfo> resultMap = commonDataService.getProductsById(productId);
