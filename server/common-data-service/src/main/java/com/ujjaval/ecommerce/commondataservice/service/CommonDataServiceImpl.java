@@ -86,13 +86,26 @@ public class CommonDataServiceImpl implements CommonDataService {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
+        System.out.println("user id in service from controller");
+        System.out.println(userId);
+
         List<Integer> visitedProductIds = Collections.emptyList();
-        if(userId != null){
-            visitedProductIds = visitedProductService.getProductIdsByUserId(Integer.parseInt(userId));
+
+        try{
+            if(userId != null && userId != "null"){
+                visitedProductIds = visitedProductService.getProductIdsByUserId(Integer.parseInt(userId));
+            }
+            else{
+                visitedProductIds = visitedProductService.getProductIdsByUserId(0);
+            }
         }
-        else{
-            visitedProductIds = visitedProductService.getProductIdsByUserId(0);
+        catch(Exception e) {
+            //  Block of code to handle errors
         }
+        
+
+        System.out.println("user id to repor from service");
+        System.out.println(userId);
         
 
         List<ProductInfo> productList = productInfoRepository.getRecommendedProducts(visitedProductIds);

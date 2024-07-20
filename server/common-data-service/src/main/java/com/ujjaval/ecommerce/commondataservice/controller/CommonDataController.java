@@ -83,6 +83,13 @@ public class CommonDataController {
 
     @GetMapping(value = "/home", params = "user_id")
     public ResponseEntity<?> getMainScreenData(@RequestParam("user_id") String userId) {
+        if (userId == null || userId == "null"){
+            userId = "0";
+        }
+
+        System.out.println("user id in controller");
+        System.out.println(userId);
+
         MainScreenResponse mainScreenInfoList = commonDataService.getHomeScreenData("homeAPI", userId);
         if (mainScreenInfoList == null) {
             return new ResponseEntity<Error>(HttpStatus.CONFLICT);
