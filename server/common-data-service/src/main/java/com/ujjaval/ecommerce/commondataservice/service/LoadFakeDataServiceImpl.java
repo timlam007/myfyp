@@ -149,7 +149,7 @@ public class LoadFakeDataServiceImpl implements LoadFakeDataService {
                             title += ",";
                             String[] categories = title.split(",");
                             link = new StringBuilder("genders=");
-                            for (String category : categories) {
+                            for (String category : categories) { 
                                 genderCategory = genderCategoryRepository.findByType(category);
                                 link.append(genderCategory.getId()).append(",");
                             }

@@ -34,4 +34,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfo, Intege
 
     @Query(value = "SELECT DISTINCT p.name FROM ProductInfo p")
     List<String> getProductByName();
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM ProductInfo p")
+    boolean anyProductExists();
 }

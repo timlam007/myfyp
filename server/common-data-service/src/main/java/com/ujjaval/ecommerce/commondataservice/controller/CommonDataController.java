@@ -38,7 +38,7 @@ public class CommonDataController {
     LoadFakeDataService loadFakeDataService;
 
     public void fillWithTestData() {
-        if (Objects.equals(environment.getProperty("ACTIVE_PROFILE"), "dev")) {
+        if (Objects.equals(environment.getProperty("ACTIVE_PROFILE"), "dev") && !visitedProductService.anyProductExists()) {
             loadFakeDataService.loadTestData();
         }
     }
