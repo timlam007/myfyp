@@ -26,9 +26,11 @@ public class PaymentController {
         return ResponseEntity.ok("success");
     }
 
-    @PostMapping("/payment")
+    @PostMapping(value = "/payment")
     public ResponseEntity<PaymentStatus> chargeCustomer(@RequestBody CardToken cardToken) {
-
+        System.out.println("*********************** payment krne agaye ****************");
+        System.out.println("cardToken = " + cardToken);
+        
         Stripe.apiKey = "sk_test_51LtFEhK3R0JYjUuZzZnmebbFihD5cc9I7R5U0we3T72TnrOSDhswwBVRskVIp3GRQSghR9uIMQ9JLZoeb5c0k5UG00mhUHTflg";
         Stripe.setMaxNetworkRetries(2);
 

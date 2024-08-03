@@ -73,6 +73,7 @@ export const signIn = formValues => async dispatch => {
 export const signOut = () => {
     log.info(`[ACTION]: signOut Cookie is removed...`)
     Cookies.remove(AUTH_DETAILS_COOKIE)
+    window.location.reload()
     return {
         type: HANDLE_SIGN_OUT
     }
@@ -208,6 +209,14 @@ export const sendPaymentToken = (token) => async dispatch => {
     } else {
         url = `http://localhost:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
     }
+    
+    let userId = localStorage.getItem("user_id")
+    
+    token["userid"] = userId
+    
+    console.log("**************************")
+    console.log(token)
+    console.log("**************************")
 
     let config = {
         method: 'post',
@@ -218,7 +227,6 @@ export const sendPaymentToken = (token) => async dispatch => {
         data: JSON.stringify(token)
     };
 
-    log.info(`URL = ${config.url}`)
 
     axios(config)
         .then(function (response) {

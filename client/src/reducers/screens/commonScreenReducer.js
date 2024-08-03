@@ -217,8 +217,7 @@ export const savedSortedListReducer = (state = null, action) => {
     }
 };
 
-export const shippingAddressReducer = (state
-                                           = INITIAL_SHIPPING_ADDRESS_STATE, action) => {
+export const shippingAddressReducer = (state = INITIAL_SHIPPING_ADDRESS_STATE, action) => {
     switch (action.type) {
         case SHIPPING_ADDRESS_CONFIRMED:
             return action.payload

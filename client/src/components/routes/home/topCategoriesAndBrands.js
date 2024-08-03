@@ -91,6 +91,7 @@ const TopCategoriesAndBrands = () => {
 
     const renderCategoryAndBrandsList = (title, dataList, qType) => {
         localStorage.setItem("user_id", id);
+        console.log("this is from storage === ", localStorage.getItem("user_id"))
         if (dataList.length) {
             if(qType != queryType.product){
                 return (
