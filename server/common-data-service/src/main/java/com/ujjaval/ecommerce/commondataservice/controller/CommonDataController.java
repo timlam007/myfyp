@@ -10,6 +10,7 @@ import com.ujjaval.ecommerce.commondataservice.model.MainScreenResponse;
 import com.ujjaval.ecommerce.commondataservice.model.SearchSuggestionResponse;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.CommonDataService;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.LoadFakeDataService;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.OrderInfoService;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class CommonDataController {
 
     @Autowired
     VisitedProductService visitedProductService;
+
+    @Autowired
+    OrderInfoService orderInfoService;
 
     @Autowired
     LoadFakeDataService loadFakeDataService;
@@ -129,9 +133,7 @@ public class CommonDataController {
     @PostMapping(value = "/order-info")
     public ResponseEntity<OrderInfo> saveOrderInfo(@RequestBody OrderInfo orderInfo) {
 
-        System.out.println("is api mein enter hogaye ein");
-        System.out.println(orderInfo);
-
+        orderInfoService.saveOrderInfo(orderInfo);
 
         return ResponseEntity.ok(orderInfo);
     }

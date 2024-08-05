@@ -120,8 +120,7 @@ export const tabsDataReducer = (state = {isLoading: true}, action) => {
     }
 };
 
-export const addToCartReducer = (state
-                                     = {totalQuantity: 0, productQty: {}}, action) => {
+export const addToCartReducer = (state = {totalQuantity: 0, productQty: {}}, action) => {
     switch (action.type) {
         case ADD_TO_CART:
             return {

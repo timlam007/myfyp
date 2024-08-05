@@ -6,7 +6,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +27,10 @@ public class OrderInfo implements Serializable  {
 
     private String timestamp;
 
+    private String amount;
+
+    private String currency;
+
     private String deliveryStatus;
 
     private String trackPackageLink;
@@ -34,6 +42,9 @@ public class OrderInfo implements Serializable  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private OrderInfo orderInfo;
+
+    @OneToMany(mappedBy = "orderInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItemInfo> orderItems;
 
     public OrderInfo(int customerId, String timestamp, String deliveryStatus, String trackPackageLink, OrderInfo orderInfo) {
         this.customerId = customerId;

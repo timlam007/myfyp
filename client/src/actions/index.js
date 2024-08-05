@@ -246,6 +246,20 @@ export const sendPaymentToken = (token) => async dispatch => {
                     url = `http://localhost:${process.env.REACT_APP_COMMON_DATA_SERVICE_PORT}/order-info`
                 }
                 
+                let orderItems = [];
+                let orderQty = token["addToCart"]["productQty"];
+                let orderItem = token["shoppingBagProducts"]["data"];
+
+                for (var key in orderQty) {
+                    orderItems.push({
+                        "productId": key,
+                        "quantity": orderQty[key],
+                        "imageURL": orderItem[key]["imageURL"],
+                        "price": orderItem[key]["price"],
+                        "name": orderItem[key]["name"],
+                    });
+                }
+
                 let config = {
                     method: 'post',
                     url: url,
@@ -253,7 +267,15 @@ export const sendPaymentToken = (token) => async dispatch => {
                         'Content-Type': 'application/json',
                     },
                     data: JSON.stringify({
-                        "customerId": parseInt(userId)
+                        "customerId": parseInt(userId),
+                        "timestamp": token["created"],
+                        "addressInfo": {
+                            "firstLine": token["address"]["addressLine1"],
+                            "zipCode": token["address"]["zipCode"],
+                        },
+                        "orderItems": orderItems,
+                        "currency": token["currency"],
+                        "amount": token["amount"],
                     })
                 };
 
