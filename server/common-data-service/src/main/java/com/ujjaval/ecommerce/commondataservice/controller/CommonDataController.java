@@ -1,6 +1,7 @@
 package com.ujjaval.ecommerce.commondataservice.controller;
 
 import com.ujjaval.ecommerce.commondataservice.dto.ProductInfoDTO;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.info.OrderInfo;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.ProductInfo;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.VisitedProduct;
 import com.ujjaval.ecommerce.commondataservice.model.FilterAttributesResponse;
@@ -16,6 +17,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,9 +90,6 @@ public class CommonDataController {
             userId = "0";
         }
 
-        System.out.println("user id in controller");
-        System.out.println(userId);
-
         MainScreenResponse mainScreenInfoList = commonDataService.getHomeScreenData("homeAPI", userId);
         if (mainScreenInfoList == null) {
             return new ResponseEntity<Error>(HttpStatus.CONFLICT);
@@ -124,6 +124,16 @@ public class CommonDataController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping(value = "/order-info")
+    public ResponseEntity<OrderInfo> saveOrderInfo(@RequestBody OrderInfo orderInfo) {
+
+        System.out.println("is api mein enter hogaye ein");
+        System.out.println(orderInfo);
+
+
+        return ResponseEntity.ok(orderInfo);
     }
 
     @GetMapping("/search-suggestion-list")

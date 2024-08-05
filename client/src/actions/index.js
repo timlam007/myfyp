@@ -213,10 +213,6 @@ export const sendPaymentToken = (token) => async dispatch => {
     let userId = localStorage.getItem("user_id")
     
     token["userid"] = userId
-    
-    console.log("**************************")
-    console.log(token)
-    console.log("**************************")
 
     let config = {
         method: 'post',
@@ -237,9 +233,43 @@ export const sendPaymentToken = (token) => async dispatch => {
                 exp_month: token.card.exp_month, brand: token.card.brand
             }
 
+            console.log(paymentResponse);
+
             if (paymentResponse.payment_failed) {
                 history.push(`/checkout/cancel-payment/${response.data.charge_id}`)
             } else {
+
+                let url
+                if (process.env.REACT_APP_COMMON_DATA_SERVICE_URL) {
+                    url = `${process.env.REACT_APP_COMMON_DATA_SERVICE_URL}/order-info`
+                } else {
+                    url = `http://localhost:${process.env.REACT_APP_COMMON_DATA_SERVICE_PORT}/order-info`
+                }
+                
+                let config = {
+                    method: 'post',
+                    url: url,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: JSON.stringify({
+                        "customerId": parseInt(userId)
+                    })
+                };
+
+                axios(config)
+                    .then(function (response) {
+
+                        console.log("meri api chal gayi");
+                        console.log(response);
+
+                    })
+                    .catch(function (error) {
+                        console.log("meri api phat gayi");
+                        console.log(error);
+                    });
+
+
                 history.push(`/checkout/success-payment/${response.data.charge_id}`)
                 Cookies.remove(CART_TOTAL_COOKIE)
                 Cookies.remove(SHOPPERS_PRODUCT_INFO_COOKIE)
