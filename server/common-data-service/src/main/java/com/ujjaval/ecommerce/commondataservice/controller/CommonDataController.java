@@ -2,6 +2,7 @@ package com.ujjaval.ecommerce.commondataservice.controller;
 
 import com.ujjaval.ecommerce.commondataservice.dto.ProductInfoDTO;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.OrderInfo;
+import com.ujjaval.ecommerce.commondataservice.entity.sql.info.OrderItemInfo;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.ProductInfo;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.VisitedProduct;
 import com.ujjaval.ecommerce.commondataservice.model.FilterAttributesResponse;
@@ -133,7 +134,11 @@ public class CommonDataController {
     @PostMapping(value = "/order-info")
     public ResponseEntity<OrderInfo> saveOrderInfo(@RequestBody OrderInfo orderInfo) {
 
-        orderInfoService.saveOrderInfo(orderInfo);
+        for (OrderItemInfo item : orderInfo.getOrderItems()) {
+            item.setOrderInfo(orderInfo);
+        }
+
+        orderInfoService.saveOrder(orderInfo);
 
         return ResponseEntity.ok(orderInfo);
     }
