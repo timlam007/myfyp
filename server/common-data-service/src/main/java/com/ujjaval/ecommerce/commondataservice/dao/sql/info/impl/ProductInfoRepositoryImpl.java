@@ -89,12 +89,12 @@ public class ProductInfoRepositoryImpl {
                         query.setParameter(1, id);
                         query.setParameter(2, id);
                         List<ProductInfo> temp = query.getResultList();
-                        Collections.sort(temp, new Comparator<ProductInfo>() {
-                                @Override
-                                public int compare(ProductInfo o1, ProductInfo o2) {
-                                        return Integer.compare(o1.orders.size(), o2.orders.size());
-                                }
-                        });
+                        // Collections.sort(temp, new Comparator<ProductInfo>() {
+                        //         @Override
+                        //         public int compare(ProductInfo o1, ProductInfo o2) {
+                        //                 return Integer.compare(o1.orders.size(), o2.orders.size());
+                        //         }
+                        // });
                         Collections.reverse(temp);
                         result.addAll(temp);
                         

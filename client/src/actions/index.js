@@ -269,10 +269,8 @@ export const sendPaymentToken = (token) => async dispatch => {
                     data: JSON.stringify({
                         "customerId": parseInt(userId),
                         "timestamp": token["created"],
-                        "addressInfo": {
-                            "firstLine": token["address"]["addressLine1"],
-                            "zipCode": token["address"]["zipCode"],
-                        },
+                        "firstLine": token["address"]["addressLine1"],
+                        "zipCode": token["address"]["zipCode"],
                         "orderItems": orderItems,
                         "currency": token["currency"],
                         "amount": token["amount"],

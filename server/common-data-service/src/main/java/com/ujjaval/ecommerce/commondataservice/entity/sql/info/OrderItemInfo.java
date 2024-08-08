@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class OrderItemInfo {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private OrderInfo orderInfo;
 
 }

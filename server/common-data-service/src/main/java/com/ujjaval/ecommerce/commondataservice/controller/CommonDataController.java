@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.List;
 
 @RestController
 public class CommonDataController {
@@ -101,6 +102,11 @@ public class CommonDataController {
         }
 
         return ResponseEntity.ok(mainScreenInfoList);
+    }
+
+    @GetMapping(value = "/orders", params = "user_id")
+    public ResponseEntity<List<OrderInfo>> getOrdersData(@RequestParam("user_id") String userId) {
+        return ResponseEntity.ok(orderInfoService.getAllOrders());
     }
 
     @GetMapping("/tabs")
