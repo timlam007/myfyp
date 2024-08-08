@@ -59,8 +59,6 @@ const Home = props => {
             props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false);
         }
 
-        props.getDataViaAPI(LOAD_ORDERS_PAGE, ORDERS_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false)
-
         // eslint-disable-next-line
     }, [homePageDataReducer]);
 

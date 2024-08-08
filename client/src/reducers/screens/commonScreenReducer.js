@@ -1,5 +1,6 @@
 import {
     ADD_TO_CART,
+    LOAD_ORDERS_PAGE,
     LOAD_HOME_PAGE,
     LOAD_SHOPPING_BAG_PRODUCTS,
     LOAD_FILTER_ATTRIBUTES,
@@ -105,6 +106,17 @@ export const homePageDataReducer = (state = {isLoading: true}, action) => {
     switch (action.type) {
         case LOAD_HOME_PAGE:
             log.trace(`[HOME_SCREEN_REDUCER]: action.payload = ${JSON.stringify(action.payload)}`)
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+export const ordersPageDataReducer = (state = {isLoading: true}, action) => {
+    log.trace(`[HOME_SCREEN_REDUCER]: action.type = ${action.type}`)
+    switch (action.type) {
+        case LOAD_ORDERS_PAGE:
+            log.trace(`[ORDERS_SCREEN_REDUCER]: action.payload = ${JSON.stringify(action.payload)}`)
             return action.payload;
         default:
             return state;

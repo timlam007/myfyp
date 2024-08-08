@@ -2,7 +2,7 @@ import {combineReducers} from "redux";
 import {reducer as formReducer} from "redux-form";
 
 import {
-    homePageDataReducer, addToCartReducer,
+    homePageDataReducer, ordersPageDataReducer, addToCartReducer,
     selectProductDetailReducer, shoppingBagProductReducer,
     filterProductsReducer, filterAttributesReducer,
     filterQueryReducer, tabsDataReducer,
@@ -24,6 +24,7 @@ export default combineReducers({
     form: formReducer,
     signInReducer,
     signUpReducer,
+    ordersPageDataReducer,
     homePageDataReducer,
     addToCartReducer,
     tabHoverEventReducer,

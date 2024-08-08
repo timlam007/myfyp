@@ -6,6 +6,7 @@ import NavBar from "./routes/navbar/navBar";
 import {TabPanelList} from "./routes/navbar/tabPanelList";
 import Home from "./routes/home/home";
 import SignIn from "./routes/signin/signIn";
+import Orders from "./routes/user/orders";
 import SignUp from "./routes/signup/signUp";
 import Product from "./routes/product/product";
 import ProductPage from "./routes/detail/productPage";
@@ -31,6 +32,7 @@ const App = () => {
             {serverError ? null: <Switch>
                 <Route path="/" exact component={Home}/>
                 <Route path="/signin" exact component={SignIn}/>
+                <Route path="/user/orders" exact component={Orders}/>
                 <Route path="/signup" exact component={SignUp}/>
                 <Route path="/shopping-bag" exact component={ShoppingBag}/>
                 <Route path="/checkout" exact component={Checkout}/>

@@ -269,8 +269,8 @@ export const sendPaymentToken = (token) => async dispatch => {
                     data: JSON.stringify({
                         "customerId": parseInt(userId),
                         "timestamp": token["created"],
-                        "firstLine": token["address"]["addressLine1"],
-                        "zipCode": token["address"]["zipCode"],
+                        "addressFirstLine": token["address"]["addressLine1"],
+                        "addressZipCode": token["address"]["zipCode"],
                         "orderItems": orderItems,
                         "currency": token["currency"],
                         "amount": token["amount"],
@@ -311,7 +311,7 @@ export const sendPaymentToken = (token) => async dispatch => {
 }
 
 
-export const getDataViaAPI = (type, route, query, synchronous = true) => async dispatch => {
+export const getDataViaAPI = (type, route, query, synchronous = true, returnResponseDirectly = false) => async dispatch => {
     if (route) {
         if (query) {
             route += query
@@ -321,13 +321,27 @@ export const getDataViaAPI = (type, route, query, synchronous = true) => async d
         let isFetchError = false
         if (synchronous) {
             await commonServiceAPI.get(route)
-                .then(response => processResponse(response, query, type, route))
+                .then(response => {
+                    if(returnResponseDirectly){
+                        return response;
+                    }
+                    else{
+                        processResponse(response, query, type, route);
+                    }
+                })
                 .catch(err => {
                     isFetchError = true
                 });
         } else {
             commonServiceAPI.get(route)
-                .then(response => processResponse(response, query, type, route, dispatch))
+                .then(response => {
+                    if(returnResponseDirectly){
+                        return response;
+                    }
+                    else{
+                        processResponse(response, query, type, route, dispatch);
+                    }
+                })
                 .catch(err => {
                     isFetchError = true
                 });

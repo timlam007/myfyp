@@ -189,6 +189,11 @@ const NavBar = props => {
         handleMobileMenuClose();
     }
 
+    const orderPageButtonClickHandler = () => {
+        history.push("/user/orders")
+        handleMobileMenuClose();
+    }
+
     const changePageToShoppingBagHandler = () => {
         history.push("/shopping-bag")
         setMobileMoreAnchorEl(null);
@@ -248,9 +253,15 @@ const NavBar = props => {
         setHamburgerBtnState(false)
     }
 
-    const renderIndependentElem = (eventHandler, icon, label, paddingTop) => {
+    const renderIndependentElem = (eventHandler, icon, label, paddingTop, signInRequired = false) => {
+        let hidden = "block";
+        if(signInRequired){
+            if(!isSignedIn){
+                hidden = "none";
+            }
+        }
         return (
-            <Grid item>
+            <Grid item style={{display:hidden}}>
                 <Grid container direction="column" alignItems="center"
                       onClick={eventHandler} style={{cursor: 'pointer'}}>
                     <Grid item style={{height: 21, width: 21, paddingTop: paddingTop}}>
@@ -322,6 +333,11 @@ const NavBar = props => {
 
                                 {renderIndependentElem(changeAuthStatusHandler, authIcon, authLabel,
                                     2)}
+
+                                <div className={classes.growQuarter}/>
+
+                                {renderIndependentElem(orderPageButtonClickHandler, authIcon, "Orders",
+                                    2, true)}
 
                                 <div className={classes.growQuarter}/>
 
