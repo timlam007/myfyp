@@ -31,4 +31,7 @@ public class OrderItemInfo {
     @JsonBackReference
     private OrderInfo orderInfo;
 
+    @Transient // This field won't be persisted in the database
+    private ProductInfo productInfo;
+
 }

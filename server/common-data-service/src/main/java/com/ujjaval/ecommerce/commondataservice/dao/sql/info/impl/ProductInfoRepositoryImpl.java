@@ -84,22 +84,30 @@ public class ProductInfoRepositoryImpl {
 
                 Collections.reverse(visited_product_ids);
 
-                for(Integer id : visited_product_ids){
-                        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.productBrandCategory IN (SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) AND p.priceRangeCategory.id IN (SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2))", ProductInfo.class);
+                for (Integer id : visited_product_ids) {
+                        TypedQuery<Object[]> query = entityManager.createQuery(
+                                "SELECT p, COUNT(oi) AS orderCount FROM ProductInfo p " +
+                                "LEFT JOIN OrderItemInfo oi ON p.id = oi.productId " +
+                                "WHERE p.productBrandCategory IN " +
+                                "(SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) " +
+                                "AND p.priceRangeCategory.id IN " +
+                                "(SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2)) " +
+                                "GROUP BY p.id " +
+                                "ORDER BY orderCount DESC", 
+                                Object[].class
+                        );
                         query.setParameter(1, id);
                         query.setParameter(2, id);
-                        List<ProductInfo> temp = query.getResultList();
-                        // Collections.sort(temp, new Comparator<ProductInfo>() {
-                        //         @Override
-                        //         public int compare(ProductInfo o1, ProductInfo o2) {
-                        //                 return Integer.compare(o1.orders.size(), o2.orders.size());
-                        //         }
-                        // });
-                        Collections.reverse(temp);
-                        result.addAll(temp);
-                        
+                        List<Object[]> temp = query.getResultList();
+
+                        for (Object[] obj : temp) {
+                                ProductInfo productInfo = (ProductInfo) obj[0];
+                                // Long orderCount = (Long) obj[1]; // This is the count of orders if needed
+                                result.add(productInfo);
+                        }
                 }
 
+                        
                 Set<ProductInfo> set = new HashSet<>(result);
                 List<ProductInfo> response = new ArrayList<>(set);
 

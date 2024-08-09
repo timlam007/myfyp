@@ -105,8 +105,8 @@ public class CommonDataController {
     }
 
     @GetMapping(value = "/orders", params = "user_id")
-    public ResponseEntity<List<OrderInfo>> getOrdersData(@RequestParam("user_id") String userId) {
-        return ResponseEntity.ok(orderInfoService.getAllOrders());
+    public ResponseEntity<List<OrderItemInfo>> getOrdersData(@RequestParam("user_id") String userId) {
+        return ResponseEntity.ok(orderInfoService.getUserOrderItems(userId));
     }
 
     @GetMapping("/tabs")

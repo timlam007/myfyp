@@ -74,6 +74,7 @@ export const signOut = () => {
     log.info(`[ACTION]: signOut Cookie is removed...`)
     Cookies.remove(AUTH_DETAILS_COOKIE)
     window.location.reload()
+    localStorage.setItem("user_id", -1);
     return {
         type: HANDLE_SIGN_OUT
     }
