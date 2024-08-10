@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import {Grid} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -336,12 +337,12 @@ const NavBar = props => {
 
                                 <div className={classes.growQuarter}/>
 
-                                {renderIndependentElem(orderPageButtonClickHandler, authIcon, "Orders",
+                                {renderIndependentElem(orderPageButtonClickHandler, <BagButton/>, "My Orders",
                                     2, true)}
 
                                 <div className={classes.growQuarter}/>
 
-                                {renderIndependentElem(changePageToShoppingBagHandler, <BagButton/>,
+                                {renderIndependentElem(changePageToShoppingBagHandler, <ShoppingCart/>,
                                     "Bag", 0)}
                             </Hidden>
 
@@ -351,8 +352,10 @@ const NavBar = props => {
 
                 <MobileMenu mobileMenuId={mobileMenuId}
                             authIcon={authIcon}
+                            isSignedIn = {isSignedIn}
                             authLabel={authLabel}
                             authBtnHandler={changeAuthStatusHandler}
+                            orderPageBtnHandler={orderPageButtonClickHandler}
                             bagBtnHandler={changePageToShoppingBagHandler}
                             mobileMoreAnchorEl={mobileMoreAnchorEl}
                             isMobileMenuOpen={isMobileMenuOpen}

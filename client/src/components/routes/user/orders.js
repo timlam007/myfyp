@@ -10,11 +10,13 @@ import Spinner from "../../ui/spinner";
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Rating from '@material-ui/lab/Rating';
 import {HTTPError} from "../../ui/error/httpError";
+import history from "../../../history";
 
 
 const Orders = props => {
     // let orders = getDataViaAPI(LOAD_ORDERS_PAGE, ORDERS_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false, true);
     const orderAPIData = useSelector(state => state.ordersPageDataReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
     let ordersDoesNotExistBox = "block"
     let ordersExistBox = "none"
     // console.log("here are the orders");
@@ -30,6 +32,10 @@ const Orders = props => {
 
         // eslint-disable-next-line
     }, [ordersPageDataReducer]);
+
+    if(!isSignedIn){
+        history.push("/")
+    }
 
     if (orderAPIData.isLoading) {
         console.log("[Orders]: loading")
