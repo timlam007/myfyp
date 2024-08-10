@@ -7,6 +7,8 @@ import {LOAD_ORDERS_PAGE} from "../../../actions/types";
 import {ORDERS_DATA_API} from "../../../constants/api_routes";
 import {getDataViaAPI, setDefaultSearchSuggestions} from "../../../actions";
 import Spinner from "../../ui/spinner";
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import Rating from '@material-ui/lab/Rating';
 import {HTTPError} from "../../ui/error/httpError";
 
 
@@ -73,6 +75,17 @@ const Orders = props => {
                             {order.productInfo.productBrandCategory.type}
                         </Grid>
 
+                        <Grid item style={{ fontSize: "1.1rem", fontWeight: 300 }}>
+                            <Rating
+                                    style={{zIndex: "1"}}
+                                    name="customized-empty"
+                                    defaultValue={order.productInfo.ratings}
+                                    precision={0.5}
+                                    readOnly
+                                    emptyIcon={<StarBorderIcon fontSize="inherit"/>}
+                                />
+                        </Grid>
+
                     </Grid>
 
                     <Grid item container justify="flex-end" sm={6} style={{ padding: "2rem 1rem 0 0",
@@ -88,7 +101,7 @@ const Orders = props => {
         <>
             <DocumentTitle title="My Orders" />
 
-            <Grid container justify="center" style={{ height: "100%" }}>
+            <Grid container justify="center" style={{ height: "100%", padding: "20px" }}>
                 {/* <h1 style={{ marginTop: '30px', marginBottom: '30px' }}>My Orders</h1> */}
                 
                 <Grid item xs={12} sm={11} md={7} style={{display: ordersExistBox}}>
