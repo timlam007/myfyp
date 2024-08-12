@@ -34,7 +34,7 @@ export default function MobileMenu(props) {
                 <Grid container alignItems="center">
                     <Grid item xs={7}>
                         <IconButton color="inherit">
-                            <BagButton/>
+                            <ShoppingCart/>
                         </IconButton>
                         Bag
                     </Grid>
@@ -44,7 +44,7 @@ export default function MobileMenu(props) {
                 <Grid container alignItems="center">
                     <Grid item xs={7}>
                         <IconButton color="inherit">
-                            <ShoppingCart/>
+                            <BagButton/>
                         </IconButton>
                         My Orders
                     </Grid>

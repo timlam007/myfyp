@@ -337,12 +337,12 @@ const NavBar = props => {
 
                                 <div className={classes.growQuarter}/>
 
-                                {renderIndependentElem(orderPageButtonClickHandler, <BagButton/>, "My Orders",
+                                {renderIndependentElem(orderPageButtonClickHandler, <ShoppingCart/>, "My Orders",
                                     2, true)}
 
                                 <div className={classes.growQuarter}/>
 
-                                {renderIndependentElem(changePageToShoppingBagHandler, <ShoppingCart/>,
+                                {renderIndependentElem(changePageToShoppingBagHandler, <BagButton/>,
                                     "Bag", 0)}
                             </Hidden>
 
