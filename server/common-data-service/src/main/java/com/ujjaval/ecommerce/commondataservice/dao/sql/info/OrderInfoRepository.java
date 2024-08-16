@@ -9,5 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, Integer> {
-
+    @Query("SELECT o FROM OrderInfo o WHERE o.customerId = :customerId")
+    List<OrderInfo> findOrdersByCustomerId(@Param("customerId") Integer customerId);
 }

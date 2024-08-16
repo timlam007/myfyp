@@ -104,9 +104,14 @@ public class CommonDataController {
         return ResponseEntity.ok(mainScreenInfoList);
     }
 
+    // @GetMapping(value = "/orders", params = "user_id")
+    // public ResponseEntity<List<OrderItemInfo>> getOrdersData(@RequestParam("user_id") String userId) {
+    //     return ResponseEntity.ok(orderInfoService.getUserOrderItems(userId));
+    // }
+
     @GetMapping(value = "/orders", params = "user_id")
-    public ResponseEntity<List<OrderItemInfo>> getOrdersData(@RequestParam("user_id") String userId) {
-        return ResponseEntity.ok(orderInfoService.getUserOrderItems(userId));
+    public ResponseEntity<List<OrderInfo>> getOrdersData(@RequestParam("user_id") Integer userId) {
+        return ResponseEntity.ok(orderInfoService.getUserOrders(userId));
     }
 
     @GetMapping("/tabs")

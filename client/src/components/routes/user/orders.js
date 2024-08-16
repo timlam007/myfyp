@@ -61,47 +61,55 @@ const Orders = props => {
     }
 
     const renderOrders = () => {
-
         return orderAPIData["data"].map((order) => (
-            <Grid item container key={order.id} style={{ border: '1px solid #eaeaec', margin: "1rem 0" }}>
-                <Grid item container justify="center" xs={5} sm={3}>
-                    <img src={order.imageURL} alt={order.name}
-                        style={{ height: "90%", width: "80%", paddingTop: "1rem" }} />
+            <Grid item container key={order.id} style={{ border: '1px solid #eaeaec', margin: "1rem 0", padding: "1rem" }}>
+                <Grid item container justify="space-between" alignItems="center">
+                    <Grid item>
+                        {/* <h2>Order ID: {order.id}</h2> */}
+                        <p>Order Date: {new Date(parseInt(order.timestamp) * 1000).toLocaleDateString()}</p>
+                    </Grid>
+                    <Grid item>
+                        <p>Total Amount: {(order.amount/100).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>
+                    </Grid>
                 </Grid>
-
-                <Grid item container xs={7} sm={9}>
-                    <Grid item container direction="column" sm={6} spacing={1}>
-                        <Grid item container style={{ fontSize: "1.1rem", fontWeight: 600, paddingTop: "2rem" }}>
-                            <Grid item>
-                                {order.productInfo.name}
+    
+                <Divider style={{ width: '100%', margin: "1rem 0" }} />
+    
+                {order.orderItems.map(item => (
+                    <Grid item container key={item.id} style={{ marginBottom: "1rem" }}>
+                        <Grid item container justify="center" xs={5} sm={3}>
+                            <img src={item.imageURL} alt={item.name} style={{ height: "90%", width: "80%" }} />
+                        </Grid>
+                        <Grid item container xs={7} sm={9}>
+                            <Grid item container direction="column" sm={6} spacing={1}>
+                                <Grid item container style={{ fontSize: "1.1rem", fontWeight: 600 }}>
+                                    <Grid item>
+                                        {item.name}
+                                    </Grid>
+                                </Grid>
+                                <Grid item style={{ fontSize: "1.1rem", fontWeight: 300 }}>
+                                    {item.productInfo?.productBrandCategory?.type}
+                                </Grid>
+                                <Grid item style={{ fontSize: "1.1rem", fontWeight: 300 }}>
+                                    <Rating
+                                        style={{ zIndex: "1" }}
+                                        name="customized-empty"
+                                        defaultValue={item.productInfo?.ratings}
+                                        precision={0.5}
+                                        readOnly
+                                        emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid item container justify="flex-end" sm={6} style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                                {`Qty: ${item.quantity} x ${item.price.toLocaleString('en-US', {style: 'currency', currency: 'USD'})} = ${(item.quantity * item.price).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}`}
                             </Grid>
                         </Grid>
-
-                        <Grid item style={{ fontSize: "1.1rem", fontWeight: 300 }}>
-                            {order.productInfo.productBrandCategory.type}
-                        </Grid>
-
-                        <Grid item style={{ fontSize: "1.1rem", fontWeight: 300 }}>
-                            <Rating
-                                    style={{zIndex: "1"}}
-                                    name="customized-empty"
-                                    defaultValue={order.productInfo.ratings}
-                                    precision={0.5}
-                                    readOnly
-                                    emptyIcon={<StarBorderIcon fontSize="inherit"/>}
-                                />
-                        </Grid>
-
                     </Grid>
-
-                    <Grid item container justify="flex-end" sm={6} style={{ padding: "2rem 1rem 0 0",
-                        fontWeight: "bold", fontSize: "1.1rem" }}>
-                        {`Qty: ${order.quantity} x $${order.price} = $${order.quantity * order.price}`}
-                    </Grid>
-                </Grid>
+                ))}
             </Grid>
         ));
-    };
+    };    
 
     return (
         <>
