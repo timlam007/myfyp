@@ -17,8 +17,6 @@ const removeValueIfExist = (list, id) => {
         return null
     }
 
-    console.log(`list = ${JSON.stringify(list)}`)
-
     let valueExist = false
 
     // eslint-disable-next-line array-callback-return

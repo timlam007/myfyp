@@ -227,14 +227,11 @@ export const sendPaymentToken = (token) => async dispatch => {
 
     axios(config)
         .then(function (response) {
-            console.log(JSON.stringify(response.data));
             let paymentResponse = {
                 ...response.data,
                 last4: token.card.last4, exp_year: token.card.exp_year,
                 exp_month: token.card.exp_month, brand: token.card.brand
             }
-
-            console.log(paymentResponse);
 
             if (paymentResponse.payment_failed) {
                 history.push(`/checkout/cancel-payment/${response.data.charge_id}`)
@@ -271,6 +268,8 @@ export const sendPaymentToken = (token) => async dispatch => {
                         "customerId": parseInt(userId),
                         "timestamp": token["created"],
                         "addressFirstLine": token["address"]["addressLine1"],
+                        "addressSecondLine": token["address"]["addressLine2"],
+                        "addressState": token["address"]["city"],
                         "addressZipCode": token["address"]["zipCode"],
                         "orderItems": orderItems,
                         "currency": token["currency"],
@@ -281,12 +280,8 @@ export const sendPaymentToken = (token) => async dispatch => {
                 axios(config)
                     .then(function (response) {
 
-                        console.log("meri api chal gayi");
-                        console.log(response);
-
                     })
                     .catch(function (error) {
-                        console.log("meri api phat gayi");
                         console.log(error);
                     });
 

@@ -19,8 +19,6 @@ class PaymentButton extends Component {
         log.info("[PaymentButton] onToken setting loadingHandler to true")
         this.props.loadingHandler(true)
 
-        console.log(this.props)
-
         this.props.sendPaymentToken({
             ...token,
             amount: this._GrandTotal,

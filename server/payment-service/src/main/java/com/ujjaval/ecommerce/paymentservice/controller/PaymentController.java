@@ -44,7 +44,6 @@ public class PaymentController {
                             .build();
 
             charge = Charge.create(params);
-            System.out.println("Charge = " + charge);
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             paymentStatus = new PaymentStatus(timestamp.getTime(), false,

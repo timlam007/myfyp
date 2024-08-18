@@ -1,26 +1,31 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Grid, Box, Divider, Button, Paper } from "@material-ui/core";
 import {DocumentTitle} from "../../ui/documentTitle";
 import {ordersPageDataReducer} from "../../../reducers/screens/commonScreenReducer";
-import {connect, useSelector} from "react-redux";
+import {connect, useSelector, useDispatch} from "react-redux";
 import {LOAD_ORDERS_PAGE} from "../../../actions/types";
 import {ORDERS_DATA_API} from "../../../constants/api_routes";
 import {getDataViaAPI, setDefaultSearchSuggestions} from "../../../actions";
 import Spinner from "../../ui/spinner";
+import log from 'loglevel';
+import Cookies from 'js-cookie';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Rating from '@material-ui/lab/Rating';
 import {HTTPError} from "../../ui/error/httpError";
 import history from "../../../history";
+import {ADD_TO_CART, SELECT_PRODUCT_DETAIL} from "../../../actions/types";
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import {SHOPPERS_PRODUCT_INFO_COOKIE} from "../../../constants/cookies";
 
 
 const Orders = props => {
-    // let orders = getDataViaAPI(LOAD_ORDERS_PAGE, ORDERS_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false, true);
     const orderAPIData = useSelector(state => state.ordersPageDataReducer)
     const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
+    const dispatch = useDispatch()
+    const addToCart = useSelector(state => state.addToCartReducer)
     let ordersDoesNotExistBox = "block"
     let ordersExistBox = "none"
-    // console.log("here are the orders");
-    // console.log(JSON.parse(JSON.stringify(orders)));
+    const [productQuantity, setProductQuantity] = useState(1)
 
     useEffect(() => {
         console.log("[Order]: component did mount.")
@@ -28,9 +33,6 @@ const Orders = props => {
         if (!orderAPIData.hasOwnProperty("data")) {
             props.getDataViaAPI(LOAD_ORDERS_PAGE, ORDERS_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false);
         }
-        // props.getDataViaAPI(LOAD_ORDERS_PAGE, ORDERS_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false)
-
-        // eslint-disable-next-line
     }, [ordersPageDataReducer]);
 
     if(!isSignedIn){
@@ -47,9 +49,8 @@ const Orders = props => {
                   </Grid>
             </Grid>}/>
     } else {
-
-        // check if we got the data from the API
         if (orderAPIData.hasOwnProperty("data")) {
+            console.log(orderAPIData["data"]);
             if(orderAPIData["data"].length){
                 ordersDoesNotExistBox = "none"
                 ordersExistBox = "block"
@@ -60,16 +61,60 @@ const Orders = props => {
         }
     }
 
+    // set the cart products in the cookie
+    const dispatchAddToCart = newAddToCart => {
+        Cookies.set(SHOPPERS_PRODUCT_INFO_COOKIE, newAddToCart, {expires: 7});
+        log.info(`[Product Detail] dispatchAddToCart productQty = ${JSON.stringify(newAddToCart)}`)
+        dispatch({
+            type: ADD_TO_CART,
+            payload: newAddToCart
+        })
+    }
+
+    const visitProduct = product_id => () => {
+        history.push('/products/details?q=product_id='+product_id);
+    }
+
+    const handleAddToBagBtnClick = product_id => () => {
+        log.info(`[Product Detail] Product is added to cart`)
+        let newAddToCart = addToCart
+
+        // add new product to cart
+        if (newAddToCart.hasOwnProperty("productQty") === false) {
+            newAddToCart = {
+                totalQuantity: productQuantity,
+                productQty: {
+                    [product_id]: productQuantity
+                }
+            }
+        } else {
+            let totalQuantity = 0
+            newAddToCart.productQty[product_id] = productQuantity
+            newAddToCart.totalQuantity = 0
+
+            for (const [, qty] of Object.entries(newAddToCart.productQty)) {
+                totalQuantity += qty
+            }
+            newAddToCart.totalQuantity += totalQuantity
+        }
+        dispatchAddToCart(newAddToCart)
+    }
+
     const renderOrders = () => {
         return orderAPIData["data"].map((order) => (
             <Grid item container key={order.id} style={{ border: '1px solid #eaeaec', margin: "1rem 0", padding: "1rem" }}>
                 <Grid item container justify="space-between" alignItems="center">
                     <Grid item>
-                        {/* <h2>Order ID: {order.id}</h2> */}
-                        <p>Order Date: {new Date(parseInt(order.timestamp) * 1000).toLocaleDateString()}</p>
+                        <p><b>Order Date:</b> {new Date(parseInt(order.timestamp) * 1000).toLocaleDateString()}</p>
                     </Grid>
                     <Grid item>
-                        <p>Total Amount: {(order.amount/100).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>
+                        <p><b>Total Amount: </b>{(order.amount/100).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>
+                    </Grid>
+                </Grid>
+
+                <Grid item container justify="space-between" alignItems="center">
+                    <Grid item>
+                        <p><b>Shipping Address: </b>{order.addressFirstLine}{order.addressSecondLine ? " ":""}{order.addressSecondLine}</p>
                     </Grid>
                 </Grid>
     
@@ -104,6 +149,35 @@ const Orders = props => {
                             <Grid item container justify="flex-end" sm={6} style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
                                 {`Qty: ${item.quantity} x ${item.price.toLocaleString('en-US', {style: 'currency', currency: 'USD'})} = ${(item.quantity * item.price).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}`}
                             </Grid>
+                            <Grid>
+                            <Grid item style={{ display: "flex", fontSize: "1.1rem", fontWeight: 300 }}>
+                                <Grid style={{padding: "5px"}}>
+                                <Button
+                                    style={{
+                                        height: 44, color: 'white',
+                                        fontWeight: "bold", backgroundColor: "#AB0000"
+                                    }}
+                                    fullWidth
+                                    startIcon={<AddShoppingCartIcon/>}
+                                    onClick={handleAddToBagBtnClick(item.productId)}
+                                >
+                                    ADD TO BAG
+                                </Button>
+                                </Grid>
+                                <Grid style={{padding: "5px"}}>
+                                <Button
+                                    style={{
+                                        height: 44, color: 'black',
+                                        fontWeight: "bold", backgroundColor: "#ddd"
+                                    }}
+                                    fullWidth
+                                    onClick={visitProduct(item.productId)}
+                                >
+                                    VISIT PRODUCT
+                                </Button>
+                                </Grid>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 ))}
@@ -116,7 +190,6 @@ const Orders = props => {
             <DocumentTitle title="My Orders" />
 
             <Grid container justify="center" style={{ height: "100%", padding: "20px" }}>
-                {/* <h1 style={{ marginTop: '30px', marginBottom: '30px' }}>My Orders</h1> */}
                 
                 <Grid item xs={12} sm={11} md={7} style={{display: ordersExistBox}}>
                     <h1 style={{ marginTop: '30px', marginBottom: '30px' }}>My Orders</h1>
