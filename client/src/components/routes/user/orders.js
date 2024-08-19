@@ -107,9 +107,6 @@ const Orders = props => {
                     <Grid item>
                         <p><b>Order Date:</b> {new Date(parseInt(order.timestamp) * 1000).toLocaleDateString()}</p>
                     </Grid>
-                    <Grid item>
-                        <p><b>Total Amount: </b>{(order.amount/100).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>
-                    </Grid>
                 </Grid>
 
                 <Grid item container justify="space-between" alignItems="center">
@@ -117,7 +114,16 @@ const Orders = props => {
                         <p><b>Shipping Address: </b>{order.addressFirstLine}{order.addressSecondLine ? " ":""}{order.addressSecondLine}</p>
                     </Grid>
                 </Grid>
-    
+                <Grid item container justify="space-between" alignItems="center">
+                    <Grid item>
+                        <p><b>No Of Items: </b>{order.orderItems.length}</p>
+                    </Grid>
+                </Grid>
+                <Grid item container justify="space-between" alignItems="center">
+                    <Grid item>
+                        <p><b>Total Amount: </b>{(order.amount/100).toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</p>
+                    </Grid>
+                </Grid>
                 <Divider style={{ width: '100%', margin: "1rem 0" }} />
     
                 {order.orderItems.map(item => (

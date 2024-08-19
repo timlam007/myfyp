@@ -73,7 +73,7 @@ export const signIn = formValues => async dispatch => {
 export const signOut = () => {
     log.info(`[ACTION]: signOut Cookie is removed...`)
     Cookies.remove(AUTH_DETAILS_COOKIE)
-    window.location.reload()
+    history.push("/")
     localStorage.setItem("user_id", -1);
     return {
         type: HANDLE_SIGN_OUT
