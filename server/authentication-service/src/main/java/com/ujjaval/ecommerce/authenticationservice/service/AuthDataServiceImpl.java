@@ -46,6 +46,6 @@ public class AuthDataServiceImpl implements AuthDataService {
     }
 
     public void deleteByUsernamePassword(String username, String password) throws NoSuchAlgorithmException {
-        UserInfoRepository.deleteByUsernamePassword(username, Md5Util.getInstance().getMd5Hash(password));
+        // UserInfoRepository.deleteByUsernamePassword(username, Md5Util.getInstance().getMd5Hash(password));
     }
 }

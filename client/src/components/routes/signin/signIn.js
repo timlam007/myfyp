@@ -57,17 +57,17 @@ const SignIn = () => {
 
                 <SignInForm loadingHandler={setIsLoadingState}/>
 
-                <Grid container justify="center">
+                {/* <Grid container justify="center">
                     <Grid item style={{width: "100%", padding: "1rem 0"}}>
                         <Divider horizontal>Or</Divider>
                     </Grid>
-                </Grid>
-
+                </Grid> */}
+{/* 
                 <Grid container justify="center">
                     <Grid item xs={7} sm={5}>
                         <GoogleAuthButton/>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
                 <Grid container justify="center">
                     <Typography style={{padding: '2rem 0', fontWeight: 'bold'}} variant="subtitle2">
