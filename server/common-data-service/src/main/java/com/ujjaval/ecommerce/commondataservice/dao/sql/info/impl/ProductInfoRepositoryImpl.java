@@ -111,8 +111,7 @@ public class ProductInfoRepositoryImpl {
                 Set<ProductInfo> set = new HashSet<>(result);
                 List<ProductInfo> response = new ArrayList<>(set);
 
-                return response;
-                
+                return response;                
         }
     }
 

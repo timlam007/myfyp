@@ -11,6 +11,7 @@ import history from "../../../history";
 import {SELECT_PRODUCT_DETAIL} from "../../../actions/types";
 import { signIn } from '../../../actions';
 
+
 const queryType = {
     brand: 1,
     apparel: 2,
@@ -62,6 +63,7 @@ const TopCategoriesAndBrands = () => {
                                 </Link>
                             </Grid>
                             <Grid item style={{fontSize: "14px", color: "grey", maxWidth: '100%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+
                                 {info.name}
                             </Grid>
                             <Grid item style={{fontSize: "16px", fontWeight: "bold"}}>

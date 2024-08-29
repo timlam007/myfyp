@@ -25,6 +25,8 @@ jobs:
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/api/service_api.js"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/actions/index.js"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/server/search-suggestion-service/src/main/java/com/ujjaval/ecommerce/searchsuggestionservice/config/CorsConfig.java"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/.env"
+
 
     - name: Build the images
       env:
@@ -33,8 +35,8 @@ jobs:
           EC2_MINIKUBE_SERVER_IP: ${{ vars.REACT_CLIENT_URL_SECRET }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo docker compose build"
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/client && sudo docker build -t hassanhbahmed/react-ui:latest ."
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo docker compose -f docker-compose-minikube.yml build"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/client && sudo docker build -f Dockerfile-minikube -t hassanhbahmed/react-ui:latest ."
 
 
     - name: Tagging the images
@@ -69,6 +71,7 @@ jobs:
           EC2_MINIKUBE_SERVER_IP: ${{ vars.REACT_CLIENT_URL_SECRET }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        #ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube delete"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube start --driver=docker --cpus=2 --memory=6144 --force"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl delete -f /home/ubuntu/CICD/myfyp/minikube/ && sleep 60"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl apply -f /home/ubuntu/CICD/myfyp/minikube"
@@ -80,5 +83,6 @@ jobs:
           EC2_MINIKUBE_SERVER_IP: ${{ vars.REACT_CLIENT_URL_SECRET }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|'$EC2_MINIKUBE_SERVER_IP'|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|g' /home/ubuntu/CICD/myfyp/client/.env"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|'$EC2_MINIKUBE_SERVER_IP'|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|g' /home/ubuntu/CICD/myfyp/.env"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp && sudo git reset --hard"        

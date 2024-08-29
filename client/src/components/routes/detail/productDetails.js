@@ -169,6 +169,19 @@ function ProductDetails(props) {
         props.window.scrollTo(0, 0)
     }
 
+    if (localStorage.getItem('visited_product_id') === null) {
+        localStorage.setItem('visited_product_id', JSON.stringify([selectedProduct.id]));
+    }
+    else{
+        const visited_product_id_array = JSON.parse(localStorage.getItem('visited_product_id'));
+        console.log("visited_product_id_array = ", visited_product_id_array);
+        if(!visited_product_id_array.includes(selectedProduct.id)){
+            visited_product_id_array.push(selectedProduct.id);
+        }
+        localStorage.setItem('visited_product_id', JSON.stringify(visited_product_id_array));
+    }
+
+    
     log.info(`[Product Detail] Rendering Detail Component. selectedProduct = ${JSON.stringify(selectedProduct)}`)
     return (
         <>
