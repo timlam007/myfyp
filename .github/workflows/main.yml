@@ -72,7 +72,7 @@ jobs:
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         #ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube delete"
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube start --driver=docker --cpus=2 --memory=6144 --force"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo minikube start --driver=docker --cpus=2 --memory=6144 --force --mount --mount-string='/home/ubuntu/mysql_data:/mnt/data'"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl delete -f /home/ubuntu/CICD/myfyp/minikube/ && sleep 60"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo kubectl apply -f /home/ubuntu/CICD/myfyp/minikube"
 
