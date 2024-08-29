@@ -27,7 +27,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/ubuntu/mysql_data
+    path: /mnt/data  # This should match the path in the Minikube mount command
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
