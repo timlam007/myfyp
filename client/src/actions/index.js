@@ -208,7 +208,7 @@ export const sendPaymentToken = (token) => async dispatch => {
     if (process.env.REACT_APP_PAYMENT_SERVICE_URL) {
         url = `${process.env.REACT_APP_PAYMENT_SERVICE_URL}/payment`
     } else {
-        url = `http://localhost:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
+        url = `http://EC2_MINIKUBE_SERVER_IP_PLACEHOLDER:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
     }
     
     let userId = localStorage.getItem("user_id")
@@ -241,7 +241,7 @@ export const sendPaymentToken = (token) => async dispatch => {
                 if (process.env.REACT_APP_COMMON_DATA_SERVICE_URL) {
                     url = `${process.env.REACT_APP_COMMON_DATA_SERVICE_URL}/order-info`
                 } else {
-                    url = `http://localhost:${process.env.REACT_APP_COMMON_DATA_SERVICE_PORT}/order-info`
+                    url = `http://EC2_MINIKUBE_SERVER_IP_PLACEHOLDER:${process.env.REACT_APP_COMMON_DATA_SERVICE_PORT}/order-info`
                 }
                 
                 let orderItems = [];

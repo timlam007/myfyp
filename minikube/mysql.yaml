@@ -18,6 +18,29 @@ data:
     GRANT ALL PRIVILEGES ON *.* TO 'mysqluser'@'%';
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/ubuntu/mysql_data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: mysql-db
@@ -72,7 +95,12 @@ spec:
           volumeMounts:
             - name: init-script
               mountPath: /docker-entrypoint-initdb.d
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
       volumes:
         - name: init-script
           configMap:
             name: mysql-init-script
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
