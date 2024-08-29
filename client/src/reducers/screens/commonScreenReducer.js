@@ -1,5 +1,6 @@
 import {
     ADD_TO_CART,
+    LOAD_ORDERS_PAGE,
     LOAD_HOME_PAGE,
     LOAD_SHOPPING_BAG_PRODUCTS,
     LOAD_FILTER_ATTRIBUTES,
@@ -41,8 +42,7 @@ import {
 import _ from "lodash";
 
 
-export const signInReducer = (state
-                                  = {isSignedIn: null, timestamp: null, firstName: null}, action) => {
+export const signInReducer = (state = {isSignedIn: null, timestamp: null, firstName: null, id: null}, action) => {
 
     // timestamp is used to update the state so that
     // we can stop loading progress component
@@ -50,7 +50,7 @@ export const signInReducer = (state
         case HANDLE_SIGN_IN:
             return {
                 ...state, isSignedIn: true, tokenId: action.payload.jwt, errorMsg: null,
-                firstName: action.payload.firstName, timestamp: Date.now()
+                firstName: action.payload.firstName, id: action.payload.id, timestamp: Date.now()
             };
         case HANDLE_SIGN_IN_ERROR:
             return {...state, isSignedIn: false, errorMsg: action.payload, timestamp: Date.now()};
@@ -112,6 +112,17 @@ export const homePageDataReducer = (state = {isLoading: true}, action) => {
     }
 };
 
+export const ordersPageDataReducer = (state = {isLoading: true}, action) => {
+    log.trace(`[HOME_SCREEN_REDUCER]: action.type = ${action.type}`)
+    switch (action.type) {
+        case LOAD_ORDERS_PAGE:
+            log.trace(`[ORDERS_SCREEN_REDUCER]: action.payload = ${JSON.stringify(action.payload)}`)
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
 export const tabsDataReducer = (state = {isLoading: true}, action) => {
     switch (action.type) {
         case LOAD_TABS_DATA:
@@ -121,8 +132,7 @@ export const tabsDataReducer = (state = {isLoading: true}, action) => {
     }
 };
 
-export const addToCartReducer = (state
-                                     = {totalQuantity: 0, productQty: {}}, action) => {
+export const addToCartReducer = (state = {totalQuantity: 0, productQty: {}}, action) => {
     switch (action.type) {
         case ADD_TO_CART:
             return {
@@ -218,8 +228,7 @@ export const savedSortedListReducer = (state = null, action) => {
     }
 };
 
-export const shippingAddressReducer = (state
-                                           = INITIAL_SHIPPING_ADDRESS_STATE, action) => {
+export const shippingAddressReducer = (state = INITIAL_SHIPPING_ADDRESS_STATE, action) => {
     switch (action.type) {
         case SHIPPING_ADDRESS_CONFIRMED:
             return action.payload

@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import {Grid} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -189,6 +190,11 @@ const NavBar = props => {
         handleMobileMenuClose();
     }
 
+    const orderPageButtonClickHandler = () => {
+        history.push("/user/orders")
+        handleMobileMenuClose();
+    }
+
     const changePageToShoppingBagHandler = () => {
         history.push("/shopping-bag")
         setMobileMoreAnchorEl(null);
@@ -248,9 +254,15 @@ const NavBar = props => {
         setHamburgerBtnState(false)
     }
 
-    const renderIndependentElem = (eventHandler, icon, label, paddingTop) => {
+    const renderIndependentElem = (eventHandler, icon, label, paddingTop, signInRequired = false) => {
+        let hidden = "block";
+        if(signInRequired){
+            if(!isSignedIn){
+                hidden = "none";
+            }
+        }
         return (
-            <Grid item>
+            <Grid item style={{display:hidden}}>
                 <Grid container direction="column" alignItems="center"
                       onClick={eventHandler} style={{cursor: 'pointer'}}>
                     <Grid item style={{height: 21, width: 21, paddingTop: paddingTop}}>
@@ -325,6 +337,11 @@ const NavBar = props => {
 
                                 <div className={classes.growQuarter}/>
 
+                                {renderIndependentElem(orderPageButtonClickHandler, <ShoppingCart/>, "My Orders",
+                                    2, true)}
+
+                                <div className={classes.growQuarter}/>
+
                                 {renderIndependentElem(changePageToShoppingBagHandler, <BagButton/>,
                                     "Bag", 0)}
                             </Hidden>
@@ -335,8 +352,10 @@ const NavBar = props => {
 
                 <MobileMenu mobileMenuId={mobileMenuId}
                             authIcon={authIcon}
+                            isSignedIn = {isSignedIn}
                             authLabel={authLabel}
                             authBtnHandler={changeAuthStatusHandler}
+                            orderPageBtnHandler={orderPageButtonClickHandler}
                             bagBtnHandler={changePageToShoppingBagHandler}
                             mobileMoreAnchorEl={mobileMoreAnchorEl}
                             isMobileMenuOpen={isMobileMenuOpen}

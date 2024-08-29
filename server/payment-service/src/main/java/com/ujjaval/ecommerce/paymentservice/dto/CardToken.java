@@ -11,5 +11,5 @@ public class CardToken {
     String id;
     Long amount;
     String currency;
-
+    String userid;
 }

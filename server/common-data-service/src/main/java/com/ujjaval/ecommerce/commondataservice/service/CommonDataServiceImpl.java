@@ -15,6 +15,7 @@ import com.ujjaval.ecommerce.commondataservice.model.HomeTabsDataResponse;
 import com.ujjaval.ecommerce.commondataservice.model.MainScreenResponse;
 import com.ujjaval.ecommerce.commondataservice.model.SearchSuggestionResponse;
 import com.ujjaval.ecommerce.commondataservice.service.interfaces.CommonDataService;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductService;
 import org.javatuples.Pair;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -42,6 +43,9 @@ public class CommonDataServiceImpl implements CommonDataService {
 
     @Autowired
     private BrandImagesRepository brandImagesRepository;
+
+    @Autowired
+    private VisitedProductService visitedProductService;
 
     @Autowired
     private ApparelImagesRepository apparelImagesRepository;
@@ -75,14 +79,28 @@ public class CommonDataServiceImpl implements CommonDataService {
     }
 
     @Cacheable(key = "#apiName", value = "mainScreenResponse")
-    public MainScreenResponse getHomeScreenData(String apiName, String queryParams) {
+    public MainScreenResponse getHomeScreenData(String apiName, String userId) {
 
         List<BrandImages> brandList = brandImagesRepository.getAllData();
         Type listType = new TypeToken<List<BrandImagesDTO>>() {
         }.getType();
         List<BrandImagesDTO> brandDTOList = modelMapper.map(brandList, listType);
 
-        List<ProductInfo> productList = productInfoRepository.getAllData(queryParams);
+        List<Integer> visitedProductIds = Collections.emptyList();
+
+        try{
+            if(userId != null && userId != "null"){
+                visitedProductIds = visitedProductService.getProductIdsByUserId(Integer.parseInt(userId));
+            }
+            else{
+                visitedProductIds = visitedProductService.getProductIdsByUserId(0);
+            }
+        }
+        catch(Exception e) {
+            //  Block of code to handle errors
+        }
+
+        List<ProductInfo> productList = productInfoRepository.getRecommendedProducts(visitedProductIds);
         listType = new TypeToken<List<ProductDTO>>() {
         }.getType();
         List<ProductDTO> productDTOList = modelMapper.map(productList, listType);

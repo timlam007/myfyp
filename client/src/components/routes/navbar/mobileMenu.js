@@ -3,6 +3,7 @@ import log from "loglevel";
 import {Grid, IconButton, Menu} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import BagButton from "./bagButton";
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
 
 export default function MobileMenu(props) {
 
@@ -25,9 +26,7 @@ export default function MobileMenu(props) {
                                     color="inherit">
                             {props.authIcon}
                         </IconButton>
-                    </Grid>
-                    <Grid item>
-                        <p>{props.authLabel}</p>
+                        {props.authLabel}
                     </Grid>
                 </Grid>
             </MenuItem>
@@ -35,11 +34,19 @@ export default function MobileMenu(props) {
                 <Grid container alignItems="center">
                     <Grid item xs={7}>
                         <IconButton color="inherit">
+                            <ShoppingCart/>
+                        </IconButton>
+                        Bag
+                    </Grid>
+                </Grid>
+            </MenuItem>
+            <MenuItem onClick={props.orderPageBtnHandler} style={{padding: "0 0.7rem 0 0", display: (props.isSignedIn ? 'block': 'none')}}>
+                <Grid container alignItems="center">
+                    <Grid item xs={7}>
+                        <IconButton color="inherit">
                             <BagButton/>
                         </IconButton>
-                    </Grid>
-                    <Grid item>
-                        <p>Bag</p>
+                        My Orders
                     </Grid>
                 </Grid>
             </MenuItem>

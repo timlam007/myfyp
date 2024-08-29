@@ -32,6 +32,7 @@ export const useButtonStyles = makeStyles(() => ({
 function ProductDetails(props) {
     const classes = useButtonStyles()
     const selectProductDetail = useSelector(state => state.selectProductDetailReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
 
     const selectedProduct = selectProductDetail.hasOwnProperty("data") ?
         selectProductDetail.data[history.location.search.split("product_id=")[1]] : null
@@ -106,7 +107,7 @@ function ProductDetails(props) {
             const extractedProductId = history.location.search.split("product_id=")
             log.info(`[Product Detail] extractedProductId = ${JSON.stringify(extractedProductId)}, length = ${extractedProductId.length}`)
             if (extractedProductId.length === 2) {
-                props.getDataViaAPI(SELECT_PRODUCT_DETAIL, PRODUCT_BY_ID_DATA_API + extractedProductId[1], null, false)
+                props.getDataViaAPI(SELECT_PRODUCT_DETAIL, PRODUCT_BY_ID_DATA_API + extractedProductId[1] + "&user_id=" + (id ? id : 0), null, false)
             }
         } catch (e) {
             log.error('[Product Detail] selectedProduct is null')

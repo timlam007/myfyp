@@ -6,7 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,23 +28,39 @@ public class OrderInfo implements Serializable  {
 
     private String timestamp;
 
+    private String amount;
+
+    private String currency;
+
     private String deliveryStatus;
 
     private String trackPackageLink;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private AddressInfo addressInfo;
+    private String addressFirstLine;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private OrderInfo orderInfo;
+    private String addressSecondLine;
 
-    public OrderInfo(int customerId, String timestamp, String deliveryStatus, String trackPackageLink, OrderInfo orderInfo) {
+    private String addressZipCode;
+
+    private String addressState;
+
+    private String addressCountry;
+
+    @OneToMany(mappedBy = "orderInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<OrderItemInfo> orderItems;
+
+    public OrderInfo(int customerId, String timestamp, String deliveryStatus, String trackPackageLink, String addressFirstLine, String addressSecondLine, String addressZipCode, String addressState, String addressCountry, String amount, String currency) {
         this.customerId = customerId;
         this.timestamp = timestamp;
         this.deliveryStatus = deliveryStatus;
         this.trackPackageLink = trackPackageLink;
-        this.orderInfo = orderInfo;
+        this.currency = currency;
+        this.amount = amount;
+        this.addressFirstLine = addressFirstLine;
+        this.addressSecondLine = addressSecondLine;
+        this.addressZipCode = addressZipCode;
+        this.addressState = addressState;
+        this.addressCountry = addressCountry;
     }
 }

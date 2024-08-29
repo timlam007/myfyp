@@ -25,7 +25,8 @@ class PaymentButton extends Component {
             currency: "USD",
             address: this.props.shippingAddressForm.values,
             addToCart: this.props.addToCart,
-            shippingOption: this.props.shippingOption
+            shippingOption: this.props.shippingOption,
+            shoppingBagProducts: this.props.shoppingBagProducts
         })
     }
 
@@ -82,7 +83,8 @@ const mapStateToProps = (state) => {
         shippingOption: state.shippingOptionReducer,
         addToCart: state.addToCartReducer,
         deliveryCharges: state.deliveryChargesReducer,
-        paymentResponse: state.paymentResponseReducer
+        paymentResponse: state.paymentResponseReducer,
+        shoppingBagProducts: state.shoppingBagProductReducer
     })
 }
 

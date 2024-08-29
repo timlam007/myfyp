@@ -47,7 +47,6 @@ export default function BrandCheckBox() {
      * @returns {any}
      */
     const getActiveBrandList = () => {
-        console.log("sortedBrandList ==================> " + JSON.stringify(searchBrandList))
         return searchBrandList ? searchBrandList : brandList
     }
 

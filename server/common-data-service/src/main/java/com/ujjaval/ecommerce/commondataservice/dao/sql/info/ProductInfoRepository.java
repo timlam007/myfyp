@@ -18,7 +18,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfo, Intege
 
     List<ProductInfo> getProductsById(String[] productIds);
 
-    List<ProductInfo> getAllData(String queryParams);
+    List<ProductInfo> getRecommendedProducts(List<Integer> visited_product_ids);
 
     FilterAttributesResponse getFilterAttributesByProducts(HashMap<String, String> conditionMap);
 
@@ -34,4 +34,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfo, Intege
 
     @Query(value = "SELECT DISTINCT p.name FROM ProductInfo p")
     List<String> getProductByName();
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM ProductInfo p")
+    boolean anyProductExists();
 }

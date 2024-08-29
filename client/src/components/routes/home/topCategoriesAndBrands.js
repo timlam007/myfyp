@@ -9,6 +9,8 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import {DETAILS_ROUTE} from "../../../constants/react_routes";
 import history from "../../../history";
 import {SELECT_PRODUCT_DETAIL} from "../../../actions/types";
+import { signIn } from '../../../actions';
+
 
 const queryType = {
     brand: 1,
@@ -18,6 +20,7 @@ const queryType = {
 
 const TopCategoriesAndBrands = () => {
     const homeAPIData = useSelector(state => state.homePageDataReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
     const dispatch = useDispatch()
 
     const renderImageList = (imageList, filterQueryType) => {
@@ -59,7 +62,8 @@ const TopCategoriesAndBrands = () => {
                                         title={info.name}/>
                                 </Link>
                             </Grid>
-			    <Grid item style={{fontSize: "14px", color: "grey", maxWidth: '100%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                            <Grid item style={{fontSize: "14px", color: "grey", maxWidth: '100%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+
                                 {info.name}
                             </Grid>
                             <Grid item style={{fontSize: "16px", fontWeight: "bold"}}>
@@ -87,19 +91,37 @@ const TopCategoriesAndBrands = () => {
         });
     };
 
-    const renderCategoryAndBrandsList = (title, dataList, queryType) => {
+    const renderCategoryAndBrandsList = (title, dataList, qType) => {
+        localStorage.setItem("user_id", id);
         if (dataList.length) {
-            return (
-                <>
-                    <Grid container style={{fontWeight: "bold",
-                        fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
-                        {title}
-                    </Grid>
-                    <Grid container style={{padding: '2rem 2rem'}}>
-                        {renderImageList(dataList, queryType)}
-                    </Grid>
-                </>
-            )
+            if(qType != queryType.product){
+                return (
+                    <>
+                        <Grid container style={{fontWeight: "bold",
+                            fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
+                            {title}
+                        </Grid>
+                        <Grid container style={{padding: '2rem 2rem'}}>
+                            {renderImageList(dataList, qType)}
+                        </Grid>
+                    </>
+                )
+            }
+            else{
+                if(isSignedIn){
+                    return (
+                        <>
+                            <Grid container style={{fontWeight: "bold",
+                                fontSize: "2rem", padding: "2rem 0 0 1rem", textDecoration: "underline"}}>
+                                {title}
+                            </Grid>
+                            <Grid container style={{padding: '2rem 2rem'}}>
+                                {renderImageList(dataList, qType)}
+                            </Grid>
+                        </>
+                    )
+                }
+            }
         }
     }
 

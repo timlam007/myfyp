@@ -65,10 +65,6 @@ public class ProductInfo implements Serializable {
 
     private String imageLocalPath;
 
-    @OneToMany(mappedBy = "orderInfo")
-    @JsonIgnore
-    public List<OrderInfo> orders;
-
     private String imageURL;
 
     public ProductInfo(int sellerId, String name, Date publicationDate, ProductBrandCategory productBrandCategory,

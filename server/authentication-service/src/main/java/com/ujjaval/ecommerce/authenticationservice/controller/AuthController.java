@@ -96,10 +96,10 @@ public class AuthController {
             );
         } catch (BadCredentialsException e) {
             return ResponseEntity.ok(new AuthenticationResponse(null, "Incorrect username or password.",
-                    null));
+                    null, null));
         } catch (Exception e) {
             return ResponseEntity.ok(new AuthenticationResponse(null, "Username does not exist.",
-                    null));
+                    null, null));
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -107,7 +107,7 @@ public class AuthController {
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
         UserInfo userInfo = authDataService.findByUsername(authenticationRequest.getUsername());
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt, null, userInfo.getFirstName()));
+        
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, null, userInfo.getFirstName(), String.valueOf(userInfo.userId)));
     }
 }

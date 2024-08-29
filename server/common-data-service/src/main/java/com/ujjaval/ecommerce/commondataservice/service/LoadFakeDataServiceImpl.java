@@ -120,8 +120,6 @@ public class LoadFakeDataServiceImpl implements LoadFakeDataService {
                 String title = separatedData.length > 3 ? separatedData[3] : null;
                 String gender = separatedData.length > 4 ? separatedData[4] : null;
 
-//                System.out.println(String.format("filePath = %s, title = %s",filePath, title));
-
                 switch (type) {
                     case "brand":
                         BrandImages brandImages = new BrandImages(title, imageLocalPath, imageURL);
@@ -149,7 +147,7 @@ public class LoadFakeDataServiceImpl implements LoadFakeDataService {
                             title += ",";
                             String[] categories = title.split(",");
                             link = new StringBuilder("genders=");
-                            for (String category : categories) {
+                            for (String category : categories) { 
                                 genderCategory = genderCategoryRepository.findByType(category);
                                 link.append(genderCategory.getId()).append(",");
                             }
@@ -280,15 +278,6 @@ public class LoadFakeDataServiceImpl implements LoadFakeDataService {
 
 
         try {
-
-//            File myObj = new File("filename.txt");
-//            if (myObj.createNewFile()) {
-//                System.out.println("File created: " + myObj.getName());
-//            } else {
-//                System.out.println("File already exists.");
-//            }
-//            PrintWriter writer = new PrintWriter(myObj, StandardCharsets.UTF_8);
-
             InputStream inputStream = getClass()
                     .getClassLoader().getResourceAsStream(String.format("%s/%s", DATA_DIRECTORY, WEB_DATA));
 
@@ -369,7 +358,6 @@ public class LoadFakeDataServiceImpl implements LoadFakeDataService {
                     productBrandCategoryRepository.save(productBrandCategory);
                 }
 
-                // System.out.println("price = " + price);
                 Optional<PriceRangeCategory> priceRangeCategory = findPriceRangeCategory(Integer.parseInt(price));
 
                 if(priceRangeCategory.isPresent()) {

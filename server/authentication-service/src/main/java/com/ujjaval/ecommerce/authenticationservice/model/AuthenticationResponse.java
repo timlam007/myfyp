@@ -12,4 +12,6 @@ public class AuthenticationResponse {
     private String jwt;
     private String error;
     private String firstName;
+    private String id;
+    
 }

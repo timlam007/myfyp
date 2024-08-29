@@ -62,7 +62,6 @@ export const signIn = formValues => async dispatch => {
             dispatch({type: HANDLE_SIGN_IN, payload: response.data});
             Cookies.set(AUTH_DETAILS_COOKIE, response.data, {expires: 2});
             history.push('/');
-            window.location.reload();
         } else {
             log.info(`[ACTION]: dispatch HANDLE_SIGN_IN_ERROR response.data.error = ${response.data.error}`)
             dispatch({type: HANDLE_SIGN_IN_ERROR, payload: response.data.error});
@@ -73,8 +72,6 @@ export const signIn = formValues => async dispatch => {
 export const signOut = () => {
     log.info(`[ACTION]: signOut Cookie is removed...`)
     Cookies.remove(AUTH_DETAILS_COOKIE)
-    history.push("/")
-    localStorage.setItem("user_id", -1);
     return {
         type: HANDLE_SIGN_OUT
     }
@@ -210,10 +207,6 @@ export const sendPaymentToken = (token) => async dispatch => {
     } else {
         url = `http://localhost:${process.env.REACT_APP_PAYMENT_SERVICE_PORT}/payment`
     }
-    
-    let userId = localStorage.getItem("user_id")
-    
-    token["userid"] = userId
 
     let config = {
         method: 'post',
@@ -224,9 +217,11 @@ export const sendPaymentToken = (token) => async dispatch => {
         data: JSON.stringify(token)
     };
 
+    log.info(`URL = ${config.url}`)
 
     axios(config)
         .then(function (response) {
+            console.log(JSON.stringify(response.data));
             let paymentResponse = {
                 ...response.data,
                 last4: token.card.last4, exp_year: token.card.exp_year,
@@ -236,56 +231,6 @@ export const sendPaymentToken = (token) => async dispatch => {
             if (paymentResponse.payment_failed) {
                 history.push(`/checkout/cancel-payment/${response.data.charge_id}`)
             } else {
-
-                let url
-                if (process.env.REACT_APP_COMMON_DATA_SERVICE_URL) {
-                    url = `${process.env.REACT_APP_COMMON_DATA_SERVICE_URL}/order-info`
-                } else {
-                    url = `http://localhost:${process.env.REACT_APP_COMMON_DATA_SERVICE_PORT}/order-info`
-                }
-                
-                let orderItems = [];
-                let orderQty = token["addToCart"]["productQty"];
-                let orderItem = token["shoppingBagProducts"]["data"];
-
-                for (var key in orderQty) {
-                    orderItems.push({
-                        "productId": key,
-                        "quantity": orderQty[key],
-                        "imageURL": orderItem[key]["imageURL"],
-                        "price": orderItem[key]["price"],
-                        "name": orderItem[key]["name"],
-                    });
-                }
-
-                let config = {
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    data: JSON.stringify({
-                        "customerId": parseInt(userId),
-                        "timestamp": token["created"],
-                        "addressFirstLine": token["address"]["addressLine1"],
-                        "addressSecondLine": token["address"]["addressLine2"],
-                        "addressState": token["address"]["city"],
-                        "addressZipCode": token["address"]["zipCode"],
-                        "orderItems": orderItems,
-                        "currency": token["currency"],
-                        "amount": token["amount"],
-                    })
-                };
-
-                axios(config)
-                    .then(function (response) {
-
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-
-
                 history.push(`/checkout/success-payment/${response.data.charge_id}`)
                 Cookies.remove(CART_TOTAL_COOKIE)
                 Cookies.remove(SHOPPERS_PRODUCT_INFO_COOKIE)
@@ -307,7 +252,7 @@ export const sendPaymentToken = (token) => async dispatch => {
 }
 
 
-export const getDataViaAPI = (type, route, query, synchronous = true, returnResponseDirectly = false) => async dispatch => {
+export const getDataViaAPI = (type, route, query, synchronous = true) => async dispatch => {
     if (route) {
         if (query) {
             route += query
@@ -317,27 +262,13 @@ export const getDataViaAPI = (type, route, query, synchronous = true, returnResp
         let isFetchError = false
         if (synchronous) {
             await commonServiceAPI.get(route)
-                .then(response => {
-                    if(returnResponseDirectly){
-                        return response;
-                    }
-                    else{
-                        processResponse(response, query, type, route);
-                    }
-                })
+                .then(response => processResponse(response, query, type, route, dispatch))
                 .catch(err => {
                     isFetchError = true
                 });
         } else {
             commonServiceAPI.get(route)
-                .then(response => {
-                    if(returnResponseDirectly){
-                        return response;
-                    }
-                    else{
-                        processResponse(response, query, type, route, dispatch);
-                    }
-                })
+                .then(response => processResponse(response, query, type, route, dispatch))
                 .catch(err => {
                     isFetchError = true
                 });

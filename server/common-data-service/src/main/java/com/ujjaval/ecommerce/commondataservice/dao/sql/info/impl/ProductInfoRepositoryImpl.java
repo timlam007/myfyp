@@ -6,6 +6,8 @@ import com.ujjaval.ecommerce.commondataservice.dto.*;
 import com.ujjaval.ecommerce.commondataservice.entity.sql.info.ProductInfo;
 import com.ujjaval.ecommerce.commondataservice.model.FilterAttributesResponse;
 import com.ujjaval.ecommerce.commondataservice.model.HomeTabsDataResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.ujjaval.ecommerce.commondataservice.service.interfaces.VisitedProductService;
 import com.ujjaval.ecommerce.commondataservice.utils.resulttransformers.ListResultTransformer;
 import org.javatuples.Pair;
 
@@ -19,6 +21,8 @@ public class ProductInfoRepositoryImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private VisitedProductService visitedProductService;
 
     public Pair<Long, List<ProductInfo>> getProductsByCategories(HashMap<String, String> conditionMap) {
         ParamsToQueryContext paramsToQueryContext = new ProductQueryHelper().getParamsToQueryMap(conditionMap);
@@ -60,51 +64,54 @@ public class ProductInfoRepositoryImpl {
         List<Integer> productIds = new ArrayList<>();
 
         for (String id : product_ids_str) {
-            productIds.add(Integer.valueOf(id));
+                productIds.add(Integer.valueOf(id));
         }
 
-        TypedQuery<ProductInfo> query = entityManager.createQuery(
-                "SELECT p FROM ProductInfo p WHERE p.id IN (?1)", ProductInfo.class);
+        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.id IN (?1)", ProductInfo.class);
         query.setParameter(1, productIds);
 
         return query.getResultList();
     }
 
-    public List<ProductInfo> getAllData(String queryParams) {
+    public List<ProductInfo> getRecommendedProducts(List<Integer> visited_product_ids) {
 
-        if(queryParams == null || queryParams == "" || queryParams == "0"){
+        if(visited_product_ids.isEmpty()){
                 TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p ORDER BY RAND()", ProductInfo.class);
                 return query.getResultList();
         }
         else{
                 List<ProductInfo> result = new ArrayList<>();
-                List<String> visited_product_ids = Arrays.asList(queryParams.split(","));
-                List<Integer> productIds = new ArrayList<>();
 
-                for (String id : visited_product_ids) {
-                        productIds.add(Integer.valueOf(id));
-                }
+                Collections.reverse(visited_product_ids);
 
-                Collections.reverse(productIds);
-
-                for(Integer id : productIds){
-                        TypedQuery<ProductInfo> query = entityManager.createQuery("SELECT p FROM ProductInfo p WHERE p.productBrandCategory IN (SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) AND p.priceRangeCategory.id IN (SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2))", ProductInfo.class);
+                for (Integer id : visited_product_ids) {
+                        TypedQuery<Object[]> query = entityManager.createQuery(
+                                "SELECT p, COUNT(oi) AS orderCount FROM ProductInfo p " +
+                                "LEFT JOIN OrderItemInfo oi ON p.id = oi.productId " +
+                                "WHERE p.productBrandCategory IN " +
+                                "(SELECT p.productBrandCategory FROM ProductInfo p WHERE p.id = (?1)) " +
+                                "AND p.priceRangeCategory.id IN " +
+                                "(SELECT p.priceRangeCategory.id FROM ProductInfo p WHERE p.id = (?2)) " +
+                                "GROUP BY p.id " +
+                                "ORDER BY orderCount DESC", 
+                                Object[].class
+                        );
                         query.setParameter(1, id);
                         query.setParameter(2, id);
-                        List<ProductInfo> temp = query.getResultList();
-                        Collections.sort(temp, new Comparator<ProductInfo>() {
-                                @Override
-                                public int compare(ProductInfo o1, ProductInfo o2) {
-                                        return Integer.compare(o1.orders.size(), o2.orders.size());
-                                }
-                        });
-                        Collections.reverse(temp);
-                        result.addAll(temp);
-                        
+                        List<Object[]> temp = query.getResultList();
+
+                        for (Object[] obj : temp) {
+                                ProductInfo productInfo = (ProductInfo) obj[0];
+                                // Long orderCount = (Long) obj[1]; // This is the count of orders if needed
+                                result.add(productInfo);
+                        }
                 }
 
-                return result;
-                
+                        
+                Set<ProductInfo> set = new HashSet<>(result);
+                List<ProductInfo> response = new ArrayList<>(set);
+
+                return response;                
         }
     }
 

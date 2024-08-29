@@ -12,9 +12,9 @@ import HomeMenuIcons from "./homeMenuIcons";
 import Hidden from "@material-ui/core/Hidden";
 import Spinner from "../../ui/spinner";
 import {HTTPError} from "../../ui/error/httpError";
-import {LOAD_HOME_PAGE} from "../../../actions/types";
+import {LOAD_HOME_PAGE, LOAD_ORDERS_PAGE} from "../../../actions/types";
 import {BadRequest} from "../../ui/error/badRequest";
-import {HOME_PAGE_DATA_API} from "../../../constants/api_routes";
+import {HOME_PAGE_DATA_API, ORDERS_DATA_API} from "../../../constants/api_routes";
 import {HOME_PAGE_API_OBJECT_LEN} from "../../../constants/constants"
 import {authServiceAPI} from "../../../api/service_api";
 import axios from "axios";
@@ -23,6 +23,7 @@ import {Grid} from "@material-ui/core";
 const Home = props => {
     const {hover} = useSelector(state => state.tabHoverEventReducer)
     const homeAPIData = useSelector(state => state.homePageDataReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
 
     // Main screen API is loaded during Component Did mount
     useEffect(() => {
@@ -33,7 +34,11 @@ const Home = props => {
         // Heroku so that it serves the requests quickly.
         // This should be removed when the app is deployed on actual server.
         props.setDefaultSearchSuggestions()
-        authServiceAPI.post('/authenticate').catch(err => {
+        authServiceAPI.post('/authenticate')
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(err => {
         })
         if (process.env.REACT_APP_PAYMENT_SERVICE_URL) {
             axios({
@@ -49,13 +54,9 @@ const Home = props => {
         ///////////////////////////////////////////////////////////
 
 
+
         if (!homeAPIData.hasOwnProperty("data")) {
-            if(localStorage.getItem("visited_product_id") === null){
-                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids=0", false);
-            }
-            else{
-                props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?visited_product_ids="+JSON.parse(localStorage.getItem("visited_product_id")).join(','), false);
-            }
+            props.getDataViaAPI(LOAD_HOME_PAGE, HOME_PAGE_DATA_API, "?user_id="+(localStorage.getItem("user_id") == "null" ? 0:localStorage.getItem("user_id")), false);
         }
 
         // eslint-disable-next-line

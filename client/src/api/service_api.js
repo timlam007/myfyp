@@ -10,6 +10,7 @@ const {
 } = process.env
 
 export const authServiceAPI = axios.create({
+
     baseURL: REACT_APP_AUTHENTICATION_SERVICE_URL || `http://EC2_MINIKUBE_SERVER_IP_PLACEHOLDER:7000`
 })
 

@@ -13,7 +13,7 @@ public class UserInfo {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int userId;
+    public int userId;
 
     private String firstName;
 

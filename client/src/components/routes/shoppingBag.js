@@ -27,6 +27,7 @@ import {ModalConfirmation} from "../ui/modalConfirmation";
 function ShoppingBag(props) {
     const addToCart = useSelector(state => state.addToCartReducer)
     const shoppingBagProducts = useSelector(state => state.shoppingBagProductReducer)
+    const {isSignedIn, tokenId, firstName, id} = useSelector(state => state.signInReducer)
     const dispatch = useDispatch()
     const [itemRemovalModalState, setItemRemovalModalState] = useState({active: false, productId: null})
     let cartTotal = 0
