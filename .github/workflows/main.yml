@@ -20,7 +20,7 @@ jobs:
           EC2_MINIKUBE_SERVER_IP: ${{ vars.REACT_CLIENT_URL_SECRET }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo cd /home/ubuntu/CICD/myfyp/ && sudo git pull origin main"
+        ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu/CICD/myfyp/ && sudo git pull origin main"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/.env"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/minikube/common.yaml"
         ssh -i private_key -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "sudo sed -i 's|EC2_MINIKUBE_SERVER_IP_PLACEHOLDER|'$EC2_MINIKUBE_SERVER_IP'|g' /home/ubuntu/CICD/myfyp/client/src/api/service_api.js"
