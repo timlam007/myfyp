@@ -82,3 +82,17 @@ spec:
           hostPath:
             path: /mnt/data/
             type: Directory            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-db
+spec:
+  selector:
+    app: mysql-db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 30006
+  type: NodePort
